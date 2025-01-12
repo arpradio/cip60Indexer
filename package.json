@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "pg": "^8.13.1",
+    "ws": "^8.18.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/pg": "^8.11.10",
+    "@types/ws": "^8.5.13",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.2"
+  },
+  "name": "musicindex",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node src/index.ts"
+  },
+  "keywords": ["cardano","musicNFT", "blockchain", "indexer"], 
+  "author": "sudoScientist",
+  "license": "MIT",
+  "type": "commonjs",
+  "description": "A simple script that scans the Cardano blockchain for transactions containing the key music_metadata_version, indicating it is a music token."
+}
