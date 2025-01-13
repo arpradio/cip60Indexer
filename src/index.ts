@@ -47,9 +47,9 @@ class MusicTokenIndexer {
                 this.latestProcessedHash = lastState.hash;
                 console.log(`Loaded last state from database - Slot: ${this.latestProcessedSlot}, Hash: ${lastState.hash}`);
             } else {
-                this.latestProcessedSlot = 133660799;
-                this.latestProcessedHash = "e757d57eb8dc9500a61c60a39fadb63d9be6973ba96ae337fd24453d4d15c343";
-                console.log('No previous state found in database, using default starting point');
+                this.latestProcessedSlot = 52876752;
+                this.latestProcessedHash = "af192981f47a4150b4d4f96e2184050699febbbc31de18c3815bb5f338578ff6";
+                console.log('No previous state found in database, using Allegra as starting point...');
             }
     
             if (!this.latestProcessedSlot || !this.latestProcessedHash) {
@@ -272,8 +272,20 @@ class MusicTokenIndexer {
         if (block.tip) {
             const tipSlot = Number(block.tip.slot);
             if (!isNaN(tipSlot)) {
-                const progress = ((currentSlot / tipSlot) * 100).toFixed(2);
-                console.log(`Progress: ${progress}% (${currentSlot}/${tipSlot})`);
+                const progress = (currentSlot / tipSlot);
+                const barWidth = 30;
+                const filled = Math.round(progress * barWidth);
+                const empty = barWidth - filled;
+                const progressBar = '█'.repeat(filled) + '░'.repeat(empty);
+                const percentage = (progress * 100).toFixed(2);
+
+                process.stdout.cursorTo(0);
+                process.stdout.clearLine(0);
+                process.stdout.write(
+                    `Syncing: [${progressBar}] ${percentage}% | ` +
+                    `Block: ${this.networkBlockHeight.toLocaleString('en-US')} | ` +
+                    `Slot: ${currentSlot.toLocaleString('en-US')}/${tipSlot.toLocaleString('en-US')}`
+                );
             }
         }
     }
