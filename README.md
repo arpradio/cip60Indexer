@@ -1,6 +1,6 @@
 <img width="666" alt="psyencelab" src="https://github.com/user-attachments/assets/e1d10ccd-a411-4d85-9fb0-549f6ca36bcd" />
 
-# ArpRadio | CIP60 Indexer
+# ArpRadio | CIP-60 Indexer
 Music Token (CIP-60 compliant) indexing tool for the Cardano blockchain using Ogmios and Postgres
 
 **Requirements**
