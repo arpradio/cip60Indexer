@@ -47,18 +47,18 @@ function renderSplashScreen() {
 ║   | | |  _  | |___  |  __/ ___) | |_| | |___| |\\  | |___| |___  | |___ / ___ \\| |_) |      ║  
 ║   |_| |_| |_|_____| |_|   |____/ \\__, |_____|_| \\_|\\____|_____| |_____/_/   \\_\\____/       ║
 ║                                   |___/                                                    ║
-╚════════════════════════════════════════════════════════════════════════════════════════════╝
-
-                     ${cyan}Pioneering in the future of web3 Music${reset}                     
+╚════════════════════════════════════════════════════════════════════════════════════════════╝                     
                                                                                
-${yellow}♪${reset} ${blue}♫${reset} ${cyan}∿∿∿∿∿∿∿${reset} ${yellow}♪${reset} ${blue}♫${reset} Audio Engineering | Music Production | Publication ${yellow}♪${reset} ${blue}♫${reset} ${cyan}∿∿∿∿∿∿∿${reset} ${yellow}♪${reset} ${blue}♫${reset}                                              
-                                                                               
+${yellow}♪${reset} ${blue}♫${reset} ${cyan}∿∿∿∿∿∿∿${reset} ${yellow}♪${reset} ${blue}♫${reset} Audio Engineering | Music Production | Publication ${yellow}♪${reset} ${blue}♫${reset} ${cyan}∿∿∿∿∿∿∿${reset} ${yellow}♪${reset} ${blue}♫${reset}                                                                               
                           ${cyan}https://psyencelab.media${reset}     
-                          ${cyan}https://arpradio.media${reset}     
-                          
-                           ${cyan}CIP 60 Indexer v0.1.0_alpha${reset} 
-                                                                               
-                       ${yellow}🎹  🎸  🎼  🎵  🎶  🎚️  🎛️  🎧${reset}                                                                             
+                          ${cyan}https://arpradio.media${reset}                                                                                   
+                       ${yellow}🎹  🎸  🎼  🎵  🎶  🎚️  🎛️  🎧${reset} 
+
+                     ${cyan}Pioneering the future of web3 Music${reset}
+══════════════════════════════════════════════════════════════════════════════════════════════
+                       
+                           
+                       ${blue}CIP 60 Indexer v0.1.0_alpha${reset} 
 `;
 
     // Print the ASCII art
