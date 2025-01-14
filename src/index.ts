@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 import pg from 'pg';
 import dotenv from 'dotenv';
+import chalk from 'chalk';
 
 dotenv.config();
 
@@ -22,6 +23,51 @@ interface BlockState {
 interface LastProcessedState extends BlockState {
     updated_at: Date;
 }
+
+function renderSplashScreen() {
+    // ANSI color codes
+    const cyan = '\x1b[36m';
+    const yellow = '\x1b[33m';
+    const blue = '\x1b[34m';
+    const reset = '\x1b[0m';
+    
+    // Clear the console
+    console.clear();
+    
+    // Create some spacing at the top
+    console.log('\n');
+    
+    // Use template literal to preserve exact formatting
+    const asciiArt = `
+╔════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                            ║
+║  _____ _   _ _____   ____  ____  _   _ _____ _   _  ____ _____   _        _    ____        ║
+║ |_   _| | | | ____| |  _ \\/ ___|| | | | ____| \\ | |/ ___| ____| | |      / \\  | __ )       ║
+║   | | | |_| |  _|   | |_) \\___ \\| | | |  _| |  \\| | |   |  _|   | |     / _ \\ |  _ \\       ║
+║   | | |  _  | |___  |  __/ ___) | |_| | |___| |\\  | |___| |___  | |___ / ___ \\| |_) |      ║  
+║   |_| |_| |_|_____| |_|   |____/ \\__, |_____|_| \\_|\\____|_____| |_____/_/   \\_\\____/       ║
+║                                   |___/                                                    ║
+╚════════════════════════════════════════════════════════════════════════════════════════════╝
+
+                     ${cyan}Pioneering in the future of web3 Music${reset}                     
+                                                                               
+${yellow}♪${reset} ${blue}♫${reset} ${cyan}∿∿∿∿∿∿∿${reset} ${yellow}♪${reset} ${blue}♫${reset} Audio Engineering | Music Production | Publication ${yellow}♪${reset} ${blue}♫${reset} ${cyan}∿∿∿∿∿∿∿${reset} ${yellow}♪${reset} ${blue}♫${reset}                                              
+                                                                               
+                          ${cyan}https://psyencelab.media${reset}     
+                          ${cyan}https://arpradio.media${reset}     
+                          
+                           ${cyan}CIP 60 Indexer v0.1.0_alpha${reset} 
+                                                                               
+                       ${yellow}🎹  🎸  🎼  🎵  🎶  🎚️  🎛️  🎧${reset}                                                                             
+`;
+
+    // Print the ASCII art
+    console.log(asciiArt);
+    
+    // Add some spacing at the bottom
+    console.log('\n');
+}
+
 
 class MusicTokenIndexer {
     private ws!: WebSocket;
@@ -77,8 +123,11 @@ class MusicTokenIndexer {
         await this.pool.end();
     }
 
+    
+
     private async loadLastState(): Promise<LastProcessedState | null> {
-        console.log('Loading last known state from database...');
+        renderSplashScreen();
+        console.log(chalk.cyan('Loading last known state from database...'));
         const result = await this.pool.query(`
             SELECT last_slot::bigint as last_slot, last_block_hash, updated_at
             FROM cip60.indexer_state 
@@ -160,7 +209,7 @@ class MusicTokenIndexer {
             try {
                 const response = JSON.parse(data.toString());
                 if (response.id === 'find-intersection') {
-                    console.log('Intersection found:', JSON.stringify(response.result, null, 2));
+                    console.log('Intersection found');
                     this.requestNext();
                 } else if (response.result) {
                     await this.processBlock(response.result);
@@ -206,10 +255,7 @@ class MusicTokenIndexer {
             }
     
             points.sort((a, b) => b.slot - a.slot);
-            
-            console.log('Starting chain sync with intersection points:', 
-                points.map(p => `Slot: ${p.slot}`).join(', '));
-    
+                
             this.sendMessage("findIntersection", { points }, "find-intersection");
         } catch (error) {
             console.error('Failed to start chain sync:', error);
