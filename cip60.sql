@@ -1,6 +1,6 @@
 CREATE DATABASE cip60;
 
-e \c cip60;
+\c cip60;
 
 CREATE SCHEMA IF NOT EXISTS cip60;
 
