@@ -12,4 +12,6 @@ Music Token (CIP-60 compliant) indexing tool for the Cardano blockchain using Og
 
    The process is requires two database tables: one to store token information, and another to store sync states.  The process can be interrupted and resumed.
 
+First, create your <a href="https://github.com/arpradio/cip60Indexer/blob/main/cip60.sql">PostgreSQL Database</a>
+
 
