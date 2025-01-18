@@ -14,6 +14,7 @@ Music Token (CIP-60 compliant) indexing tool for the Cardano blockchain using Og
 
 
 Start off by running 
+
 ```git clone https://github.com/arpradio/cip60Indexer.git```
 
 then change to working directory
