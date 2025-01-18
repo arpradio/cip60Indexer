@@ -35,7 +35,7 @@ In Linux:
 
 *In Windows, the .env can be opened with any text editor*
 
-Provide your values for the following.  *Make sure to include the port number in the Ogmiso URI!!!*
+Provide your values for the following.  *Make sure to include the port number in the Ogmios URI!!!*
 ```
 OGMIOS_URI=ws://<ogmiosURL:port>
 DB_HOST=localhost
