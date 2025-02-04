@@ -143,7 +143,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [The Psyence Lab (https://psyencelab.media/) for CIP and tooling development
+- [The Psyence Lab](https://psyencelab.media/) for CIP and tooling development
 - [Ogmios](https://ogmios.dev/) team for the fantastic chain sync implementation
 - All contributors to this project
 
