@@ -32,7 +32,7 @@ The indexer consists of three main components:
 ## Prerequisites
 
 - [Git](https://git-scm.com/) (2.30.0 or higher)
-- [Node.js](https://nodejs.org/en) (v20.0.0 or higher)
+- [Node.js](https://nodejs.org/en) (v22.10.5 or higher)
 - [PostgreSQL](https://www.postgresql.org/) (14.0 or higher)
 - [Ogmios](https://ogmios.dev/) (v6.0.0 or higher)
 
