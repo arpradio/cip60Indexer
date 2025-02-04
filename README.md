@@ -10,11 +10,11 @@
 
 ## Overview
 
-The CIP-60 Music Token Indexer is a specialized blockchain indexing tool designed to track and catalog music-related NFTs on the Cardano blockchain that comply with the [CIP-60 NFT Metadata Standard](https://github.com/cardano-foundation/CIPs/pull/258). This tool provides real-time monitoring and indexing of music tokens, enabling efficient querying and analysis of on-chain music assets.
+The CIP-60 Music Token Indexer is a specialized blockchain indexing tool designed to track and catalog music-related NFTs on the Cardano blockchain that comply with the [CIP-60 NFT Metadata Standard](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0060). This tool provides real-time monitoring and indexing of music tokens, enabling efficient querying and analysis of on-chain music assets.
 
 ### Key Features
 
-- Real-time indexing of CIP-60 compliant music tokens
+- Real-time indexing of CIP-60 (CIP-25 _only_, CIP-68 _support in the works!_) compliant music tokens
 - Support for all three versions of the music metadata standard
 - Automatic state management and recovery
 - Live dashboard for monitoring indexing progress
