@@ -25,7 +25,7 @@ The CIP-60 Music Token Indexer is a specialized blockchain indexing tool designe
 
 The indexer consists of three main components:
 
-1. **Core Indexer**: Connects to Cardano network via Ogmios, processes blocks, and extracts music token metadata
+1. **Core Indexer**: Connects to Cardano network via Ogmios (_node connection is implied!  For full solution, we recommend [cardano-node-ogmios Docker Container!]([https://](https://hub.docker.com/r/cardanosolutions/cardano-node-ogmios))_), processes blocks, and extracts music token metadata
 2. **API Server**: Provides REST endpoints for querying indexed data
 3. **Dashboard**: Web interface for monitoring indexing progress and system status
 
@@ -84,8 +84,8 @@ Returns current indexing statistics and network state.
 Returns the 10 most recently indexed assets.
 
 #### GET /api/assets?search=<searchterm>
-Searches database for existing asset metadata containing matches of <searchterm>
-For complete API documentation, see [API.md](docs/API.md)
+Searches database for existing asset metadata containing matches of search term.
+
 
 ## Development
 
