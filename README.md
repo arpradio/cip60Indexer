@@ -1,8 +1,8 @@
 # CIP-60 Music Token Indexer
 
 <div align="center">
-  <img src="logo.png" alt="PsyenceLab Logo" width="200"/>
-  
+  <img width="666" alt="psyencelab" src="https://github.com/user-attachments/assets/d56aaa46-0ae2-4def-9123-e8f9a0efc5b0" />
+
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
   [![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)](https://www.typescriptlang.org/)
   [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.0-336791.svg)](https://www.postgresql.org/)
@@ -32,7 +32,7 @@ The indexer consists of three main components:
 ## Prerequisites
 
 - [Git](https://git-scm.com/) (2.30.0 or higher)
-- [Node.js](https://nodejs.org/en) (v18.0.0 or higher)
+- [Node.js](https://nodejs.org/en) (v20.0.0 or higher)
 - [PostgreSQL](https://www.postgresql.org/) (14.0 or higher)
 - [Ogmios](https://ogmios.dev/) (v6.0.0 or higher)
 
@@ -83,6 +83,8 @@ Returns current indexing statistics and network state.
 #### GET /api/assets/recent
 Returns the 10 most recently indexed assets.
 
+#### GET /api/assets?search=<searchterm>
+Searches database for existing asset metadata containing matches of <searchterm>
 For complete API documentation, see [API.md](docs/API.md)
 
 ## Development
@@ -141,12 +143,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [Cardano Foundation](https://cardanofoundation.org/) for the CIP standards
+- [The Psyence Lab (https://psyencelab.media/) for CIP and tooling development
 - [Ogmios](https://ogmios.dev/) team for the fantastic chain sync implementation
 - All contributors to this project
 
 ## Contact
 
-- Discord: [Join our server](https://discord.gg/psyencelab)
+- Discord: [Join our server](https://discord.gg/cBaWfKevkh)
 - Twitter: [@psyencelab](https://twitter.com/psyencelab)
 - Website: [psyencelab.media](https://psyencelab.media)
