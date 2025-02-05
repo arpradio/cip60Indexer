@@ -51,7 +51,7 @@ The indexer consists of three main components:
 
 3. Set up the database:
    ```bash
-   psql -U postgres -f db/init.sql
+   psql -U postgres -f cip60.sql
    ```
 
 4. Configure environment variables:
