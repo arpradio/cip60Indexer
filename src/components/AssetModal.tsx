@@ -5,174 +5,253 @@ import { Card, CardContent } from "./ui/card";
 import { IPFSMedia } from './ipfsMedia';
 import { Badge } from "./ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
-import { Bot, Music2, Info, Link as LinkIcon, Hash } from 'lucide-react';
-
-
+import { Music2, Link as LinkIcon } from 'lucide-react';
 
 interface Asset {
-    id: string;
-    policy_id: string;
-    asset_name: string;
-    metadata_version: string;
-    metadata_json: string | Record<string, any>;
-  }
-  
-  interface AssetModalProps {
-    asset: Asset | null;
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-  }
-  export default function AssetModal({ asset, open, onOpenChange }: AssetModalProps) {
-    const [metadata, setMetadata] = useState<any>(null);
-  
+  policy_id: string;
+  asset_name: string;
+  metadata_version: string;
+  metadata_json: string | Record<string, any>;
+}
 
-    useEffect(() => {
-        if (!asset) return;
-        try {
-          const parsed = typeof asset.metadata_json === 'string' 
-            ? JSON.parse(asset.metadata_json) 
-            : asset.metadata_json;
-    
-          const data = parsed["721"] 
-            ? Object.values(parsed["721"])[0]
-            : parsed;
-    
-          setMetadata(data);
-        } catch (err) {
-          console.error('Metadata parsing error:', err);
-          setMetadata(null);
-        }
-      }, [asset]);
-    
-      if (!metadata || !asset) return null;
-    
+interface AssetModalProps {
+  asset: Asset | null;
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-  const assetData = Object.values(metadata)[0] as any;
-  const files = assetData.files || [];
-  const release = assetData.release || {};
-  const musicData = {
-    artists: release.artists || assetData.artists || [],
-    genres: release.genres || assetData.genres || [],
-    title: release.release_title || assetData.album_title || assetData.name,
-    type: release.release_type || assetData.release_type || 'Single',
-    copyright: release.copyright || assetData.copyright,
+const AssetModal = ({ asset, isOpen, onClose }: AssetModalProps) => {
+  const [parsedData, setParsedData] = useState<any>(null);
+
+  useEffect(() => {
+    if (!asset) return;
+    try {
+      const rawData = typeof asset.metadata_json === 'string' 
+        ? JSON.parse(asset.metadata_json) 
+        : asset.metadata_json;
+
+      setParsedData(rawData);
+    } catch (err) {
+      console.error('Metadata parsing error:', err);
+      setParsedData(null);
+    }
+  }, [asset]);
+
+  if (!parsedData || !asset) return null;
+
+  const songFile = parsedData.files?.[0];
+  const release = parsedData.release || {};
+  const songData = songFile?.song || {};
+
+  const metadata = {
+    title: parsedData.name,
+    image: parsedData.image,
+    version: parsedData.music_metadata_version,
+    artists: [
+      ...(Array.isArray(release.artists) ? release.artists : []), 
+      ...(songData.artists?.map((a: any) => typeof a === 'object' ? Object.keys(a)[0] : a) || [])
+    ].filter(Boolean),
+    genres: [
+      ...(Array.isArray(release.genres) ? release.genres : []),
+      ...(Array.isArray(songData.genres) ? songData.genres : [])
+    ].filter(Boolean),
+    links: {
+      ...(release.links || {}),
+      ...(songData.artists?.reduce((acc: any, artist: any) => ({
+        ...acc,
+        ...(typeof artist === 'object' && artist.links || {})
+      }), {}))
+    },
+    releaseInfo: {
+      type: release.release_type || 'Single',
+      title: release.release_title,
+      producer: release.producer || songData.producer,
+      mix_engineer: release.mix_engineer,
+      mastering_engineer: release.mastering_engineer,
+      collection: release.collection,
+      series: release.series,
+      visual_artist: release.visual_artist
+    },
+    copyright: songData.copyright || release.copyright,
+    track: {
+      title: songData.song_title || songFile?.name,
+      duration: songData.song_duration,
+      number: songData.track_number,
+      src: songFile?.src,
+      mediaType: songFile?.mediaType,
+      isExplicit: release.parental_advisory === 'Explicit',
+      isrc: songData.isrc,
+      iswc: songData.iswc
+    }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-slate-900 border-slate-800 max-w-3xl">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="bg-slate-700 border-slate-800 flex flex-col items-center border border-neutral-400 w-fit align-center max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold text-slate-200 flex items-center gap-2">
-            <Hash className="h-5 w-5" />
-            {musicData.title}
+          <DialogTitle className="text-xl font-semibold text-slate-200">
+            {metadata.title}
           </DialogTitle>
         </DialogHeader>
 
-        <ScrollArea className="max-h-[80vh]">
-          <div className="p-4">
-            <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="media">Media</TabsTrigger>
-                <TabsTrigger value="details">Details</TabsTrigger>
+        <div className="grid grid-cols-2 gap-6 items-center p-6">
+          <div className="col-span-1 border-[1px] w-fit h-fit border-neutral-400">
+            <IPFSMedia
+              src={metadata.image}
+              type="image"
+              className="w-full h-full object-cover rounded-lg"
+              alt={metadata.title}
+            />
+          </div>
+
+          <div className="col-span-1">
+          <Tabs defaultValue="info" className="w-72">
+              <TabsList className='bg-black/30 text-neutral-300'>
+                <TabsTrigger value="info">Info</TabsTrigger>
+                <TabsTrigger value="track">Track & Credits</TabsTrigger>
+                <TabsTrigger value="json">JSON</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="overview" className="space-y-4">
-                <Card className="border-0 bg-slate-800">
-                  <CardContent className="pt-6">
-                    <div className="relative w-64 h-64 mx-auto mb-4">
-                      <IPFSMedia
-                        src={assetData.image}
-                        type="image"
-                        className="w-full h-full object-cover rounded-lg"
-                        alt={musicData.title}
-                      />
-                    </div>
-
-                    <div className="text-center space-y-2">
-                      <p className="text-sm text-slate-400">{musicData.type}</p>
-                      <div className="flex flex-wrap justify-center gap-2">
-                        {musicData.genres.map((genre: string, i: number) => (
-                          <Badge key={i} variant="outline" className="bg-blue-900/50">
-                            {genre}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="media" className="space-y-4">
-                {files.map((file: any, i: number) => (
-                  <Card key={i} className="bg-slate-800 border-slate-700">
-                    <CardContent className="p-4">
-                      <IPFSMedia
-                        src={file.src}
-                        type="audio"
-                        alt={file.song?.song_title || file.name}
-                        isrc={file.song?.isrc}
-                        iswc={file.song?.iswc}
-                        isExplicit={file.song?.explicit}
-                        isAIGenerated={file.song?.ai_generated}
-                      />
-                      {(file.song?.producer || file.song?.mix_engineer || file.song?.mastering_engineer) && (
-                        <div className="mt-2 pt-2 border-t border-slate-700 text-sm text-slate-400 flex flex-wrap gap-x-4">
-                          {file.song.producer && <span>Producer: {file.song.producer}</span>}
-                          {file.song.mix_engineer && <span>Mix: {file.song.mix_engineer}</span>}
-                          {file.song.mastering_engineer && <span>Master: {file.song.mastering_engineer}</span>}
+              <ScrollArea className="h-[400px] pr-4">
+                <TabsContent value="info">
+                  <Card>
+                    <CardContent className="space-y-4 pt-6">
+                      {metadata.genres.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {metadata.genres.map((genre, i) => (
+                            <Badge key={i} variant="outline" className="bg-blue-900/50">
+                              {genre}
+                            </Badge>
+                          ))}
                         </div>
                       )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </TabsContent>
 
-              <TabsContent value="details" className="space-y-4">
-                <Card className="bg-slate-800">
-                  <CardContent className="p-4 space-y-4">
-                    {musicData.artists.map((artist: any, i: number) => (
-                      <div key={i} className="space-y-2">
-                        <h4 className="text-lg font-medium text-slate-200">{artist.name}</h4>
-                        {artist.links && (
+                      {metadata.releaseInfo.collection && (
+                        <div className="text-sm text-slate-300">
+                          Collection: {metadata.releaseInfo.collection}
+                        </div>
+                      )}
+
+                      {metadata.artists.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-slate-400 mb-2">Artists</h4>
+                          {metadata.artists.map((artist, i) => (
+                            <div key={i} className="text-slate-200">{artist}</div>
+                          ))}
+                        </div>
+                      )}
+
+                      {Object.keys(metadata.links).length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-slate-400 mb-2">Links</h4>
                           <div className="flex flex-wrap gap-2">
-                            {Object.entries(artist.links).map(([platform, url]: [string, any]) => (
+                            {Object.entries(metadata.links).map(([platform, url]) => (
                               <a
                                 key={platform}
-                                href={typeof url === 'string' ? url : '#'}
+                                href={typeof url === 'string' ? url : Array.isArray(url) ? url[0] : '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-1 px-2 py-1 bg-slate-700 rounded text-sm text-blue-400 hover:bg-slate-600"
+                                className="flex items-center gap-1 px-2 py-1 bg-slate-800 rounded text-sm text-blue-400 hover:bg-slate-700"
                               >
                                 <LinkIcon className="h-3 w-3" />
                                 {platform}
                               </a>
                             ))}
                           </div>
-                        )}
-                      </div>
-                    ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
 
-                    {musicData.copyright && (
-                      <div className="pt-4 border-t border-slate-700">
-                        <h4 className="text-sm font-medium text-slate-400 mb-2">Rights</h4>
-                        {typeof musicData.copyright === 'string' ? (
-                          <p className="text-slate-200">{musicData.copyright}</p>
-                        ) : (
-                          <div className="space-y-1">
-                            <p className="text-slate-200">℗ {musicData.copyright.master}</p>
-                            <p className="text-slate-200">© {musicData.copyright.composition}</p>
+                <TabsContent value="track" >
+                  <div className="space-y-4">
+                    {metadata.track.src && (
+                      <IPFSMedia
+                        src={metadata.track.src}
+                        type="audio"
+                        alt={metadata.track.title}
+                        isrc={metadata.track.isrc}
+                        iswc={metadata.track.iswc}
+                        isExplicit={metadata.track.isExplicit}
+                      />
+                    )}
+
+                    <Card>
+                      <CardContent className="space-y-2 pt-4">
+                        {metadata.releaseInfo.producer && (
+                          <div className="text-sm text-slate-300">
+                            Producer: {metadata.releaseInfo.producer}
                           </div>
                         )}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
+                        {metadata.releaseInfo.mix_engineer && (
+                          <div className="text-sm text-slate-300">
+                            Mix: {metadata.releaseInfo.mix_engineer}
+                          </div>
+                        )}
+                        {metadata.releaseInfo.mastering_engineer && (
+                          <div className="text-sm text-slate-300">
+                            Master: {metadata.releaseInfo.mastering_engineer}
+                          </div>
+                        )}
+                        {metadata.releaseInfo.visual_artist && (
+                          <div className="text-sm text-slate-300">
+                            Visual Artist: {metadata.releaseInfo.visual_artist}
+                          </div>
+                        )}
+                        {metadata.copyright && (
+                          <div className="text-sm text-slate-300">
+                            {typeof metadata.copyright === 'string' ? 
+                              metadata.copyright :
+                              <>
+                                {metadata.copyright.master}<br/>
+                                {metadata.copyright.composition}
+                              </>
+                            }
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="json" className="w-72">
+                  <Card>
+                    <CardContent className="space-y-4 w-64 pt-6">
+                      <button
+                        onClick={() => {
+                          const formattedJson = {
+                            "721": {
+                              [asset.policy_id]: {
+                                [asset.asset_name]: parsedData
+                              }
+                            }
+                          };
+                          navigator.clipboard.writeText(JSON.stringify(formattedJson, null, 2));
+                        }}
+                        className=" w-fit text-xs bg-blue-600 hover:bg-blue-700 text-white p-2 rounded transition-colors"
+                      >
+                        Copy JSON
+                      </button>
+                      <pre className="text-xs text-slate-300 whitespace-pre-wrap font-mono">
+                        {JSON.stringify({
+                          "721": {
+                            [asset.policy_id]: {
+                              [asset.asset_name]: parsedData
+                            }
+                          }
+                        }, null, 2)}
+                      </pre>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </ScrollArea>
             </Tabs>
           </div>
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default AssetModal;

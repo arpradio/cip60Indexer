@@ -90,10 +90,8 @@ export const AssetsSearch = () => {
       {/* Search UI */}
       <AssetModal 
         asset={selectedAsset}
-        open={!!selectedAsset}
-        onOpenChange={(open) => {
-          if (!open) setSelectedAsset(null);
-        }}
+        isOpen={!!selectedAsset}
+        onClose={() => setSelectedAsset(null)}
       />
     </>
       </div>
@@ -190,7 +188,7 @@ const Dashboard: React.FC = () => {
           ))}
         </div>
 
-        <article className="bg-slate-800 rounded-lg border-[1px] border-neutral-500 shadow p-6">
+        <article className="bg-slate-800 rounded-lg border-[1px] border-neutral-500 shadow p-4">
           <h2 className="text-lg font-semibold  text-slate-200 mb-4">
             Sync Status
           </h2>
