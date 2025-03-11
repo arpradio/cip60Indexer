@@ -249,6 +249,34 @@ router.get('/stats', async (req, res) => {
     }
 });
 
+// In API server
+// Add health check endpoint
+router.get('/health', async (req, res) => {
+    try {
+      // Check database connection
+      await pool.query('SELECT 1');
+      
+      // Check Ogmios connection
+      const ogmiosStatus = ogmiosConnection.isConnected() ? 'connected' : 'disconnected';
+      
+      // Return health status
+      res.json({
+        status: 'healthy',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        components: {
+          database: 'healthy',
+          ogmios: ogmiosStatus
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 'unhealthy',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
 router.get('/assets', async (req, res) => {
     try {
         const { search } = req.query;
@@ -366,7 +394,7 @@ async function startServer() {
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
             updateStats();
-            setInterval(updateStats, 5000);
+            setInterval(updateStats, 3000);
         });
 
     } catch (error) {
