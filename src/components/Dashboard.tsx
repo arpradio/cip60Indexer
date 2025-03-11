@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
   const [showRecentAssets, setShowRecentAssets] = useState<boolean>(false);
   const [recentAssets, setRecentAssets] = useState<Asset[]>([]);
   const [isLoadingAssets, setIsLoadingAssets] = useState<boolean>(false);
-  
+
   useEffect(() => {
   let isActive = true;
   
@@ -63,6 +63,20 @@ const Dashboard: React.FC = () => {
     clearInterval(interval);
   };
 }, []);
+
+  const fetchRecentAssets = useCallback(async () => {
+    setIsLoadingAssets(true);
+    try {
+      const response = await fetch('/api/assets/recent');
+      const data = await response.json();
+      setRecentAssets(data);
+      setShowRecentAssets(true);
+    } catch (error) {
+      console.error('Error fetching recent assets:', error);
+    } finally {
+      setIsLoadingAssets(false);
+    }
+  }, []);
 
   const fetchRecentAssets = useCallback(async () => {
     setIsLoadingAssets(true);
