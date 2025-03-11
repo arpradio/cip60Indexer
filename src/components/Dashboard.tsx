@@ -24,10 +24,20 @@ const Dashboard: React.FC = () => {
   const [isLoadingAssets, setIsLoadingAssets] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await fetch('/api/stats');
-        const data: NetworkStats = await response.json();
+  let isActive = true;
+  
+  const fetchStats = async () => {
+    if (!isActive) return;
+    
+    try {
+      const response = await fetch('/api/stats');
+      if (!response.ok) {
+        throw new Error(`Error fetching stats: ${response.status}`);
+      }
+      
+      const data: NetworkStats = await response.json();
+      
+      if (isActive) {
         setStats(prevStats => {
           if (
             data.currentSlot !== prevStats.currentSlot ||
@@ -39,14 +49,33 @@ const Dashboard: React.FC = () => {
           }
           return prevStats;
         });
-      } catch (error) {
-        console.error('Error fetching stats:', error);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
+  
+  fetchStats();
+  const interval = setInterval(fetchStats, 3000);
+  
+  return () => {
+    isActive = false;
+    clearInterval(interval);
+  };
+}, []);
 
-    fetchStats();
-    const interval = setInterval(fetchStats, 100);
-    return () => clearInterval(interval);
+  const fetchRecentAssets = useCallback(async () => {
+    setIsLoadingAssets(true);
+    try {
+      const response = await fetch('/api/assets/recent');
+      const data = await response.json();
+      setRecentAssets(data);
+      setShowRecentAssets(true);
+    } catch (error) {
+      console.error('Error fetching recent assets:', error);
+    } finally {
+      setIsLoadingAssets(false);
+    }
   }, []);
 
   const fetchRecentAssets = useCallback(async () => {

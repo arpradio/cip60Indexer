@@ -35829,9 +35829,8 @@ var __spreadArray = (undefined && undefined.__spreadArray) || function (to, from
 
 var AssetModal = function (_a) {
     var _b, _c;
-    var _d, _e, _f;
     var asset = _a.asset, isOpen = _a.isOpen, onClose = _a.onClose;
-    var _g = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null), parsedData = _g[0], setParsedData = _g[1];
+    var _d = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null), parsedData = _d[0], setParsedData = _d[1];
     (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
         if (!asset)
             return;
@@ -35848,96 +35847,122 @@ var AssetModal = function (_a) {
     }, [asset]);
     if (!parsedData || !asset)
         return null;
-    var songFile = (_d = parsedData.files) === null || _d === void 0 ? void 0 : _d[0];
+    var songFile = parsedData.files && parsedData.files.length > 0
+        ? parsedData.files[0]
+        : { name: '', mediaType: '', src: '', song: {} };
     var release = parsedData.release || {};
-    var songData = (songFile === null || songFile === void 0 ? void 0 : songFile.song) || {};
+    var songData = songFile.song || {};
+    var processArtists = function (artistsArray) {
+        if (!Array.isArray(artistsArray))
+            return [];
+        return artistsArray.map(function (artist) {
+            if (typeof artist === 'string')
+                return artist;
+            if (typeof artist === 'object' && artist !== null) {
+                if (artist.name && typeof artist.name === 'string')
+                    return artist.name;
+                if (Object.keys(artist).length > 0)
+                    return String(Object.keys(artist)[0]);
+            }
+            return '';
+        }).filter(Boolean);
+    };
+    var processLinks = function (artists) {
+        if (!Array.isArray(artists))
+            return {};
+        return artists.reduce(function (acc, artist) {
+            if (typeof artist !== 'object' || artist === null)
+                return acc;
+            if (artist.links && typeof artist.links === 'object') {
+                return __assign(__assign({}, acc), artist.links);
+            }
+            var artistKey = Object.keys(artist)[0];
+            if (artistKey && artist[artistKey] &&
+                typeof artist[artistKey] === 'object' &&
+                artist[artistKey].links) {
+                return __assign(__assign({}, acc), artist[artistKey].links);
+            }
+            return acc;
+        }, {});
+    };
+    var releaseArtists = Array.isArray(release.artists) ? processArtists(release.artists) : [];
+    var songArtists = Array.isArray(songData.artists) ? processArtists(songData.artists) : [];
     var metadata = {
-        title: parsedData.name,
-        image: parsedData.image,
-        version: parsedData.music_metadata_version,
-        artists: __spreadArray(__spreadArray([], (Array.isArray(release.artists) ? release.artists : []), true), (((_e = songData.artists) === null || _e === void 0 ? void 0 : _e.map(function (a) { return typeof a === 'object' ? Object.keys(a)[0] : a; })) || []), true).filter(Boolean),
+        title: parsedData.name || '',
+        image: parsedData.image || '',
+        version: parsedData.music_metadata_version || '',
+        artists: __spreadArray(__spreadArray([], releaseArtists, true), songArtists, true),
         genres: __spreadArray(__spreadArray([], (Array.isArray(release.genres) ? release.genres : []), true), (Array.isArray(songData.genres) ? songData.genres : []), true).filter(Boolean),
-        links: __assign(__assign({}, (release.links || {})), ((_f = songData.artists) === null || _f === void 0 ? void 0 : _f.reduce(function (acc, artist) { return (__assign(__assign({}, acc), (typeof artist === 'object' && artist.links || {}))); }, {}))),
+        links: __assign(__assign({}, (release.links && typeof release.links === 'object' ? release.links : {})), processLinks(songData.artists)),
         releaseInfo: {
             type: release.release_type || 'Single',
-            title: release.release_title,
-            producer: release.producer || songData.producer,
-            mix_engineer: release.mix_engineer,
-            mastering_engineer: release.mastering_engineer,
-            collection: release.collection,
-            series: release.series,
-            visual_artist: release.visual_artist
+            title: release.release_title || '',
+            producer: release.producer || songData.producer || '',
+            mix_engineer: release.mix_engineer || '',
+            mastering_engineer: release.mastering_engineer || '',
+            collection: release.collection || '',
+            series: release.series || '',
+            visual_artist: release.visual_artist || ''
         },
-        copyright: songData.copyright || release.copyright,
-        track: {
-            title: songData.song_title || (songFile === null || songFile === void 0 ? void 0 : songFile.name),
-            duration: songData.song_duration,
-            number: songData.track_number,
-            src: songFile === null || songFile === void 0 ? void 0 : songFile.src,
-            mediaType: songFile === null || songFile === void 0 ? void 0 : songFile.mediaType,
-            isExplicit: release.parental_advisory === 'Explicit',
-            isrc: songData.isrc,
-            iswc: songData.iswc
-        }
+        copyright: null
     };
-    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_dialog__WEBPACK_IMPORTED_MODULE_2__.Dialog, { open: isOpen, onOpenChange: function (open) { return !open && onClose(); }, children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_dialog__WEBPACK_IMPORTED_MODULE_2__.DialogContent, { className: "bg-slate-700 border-slate-800 flex flex-col items-center border border-neutral-400 w-fit align-center max-w-3xl", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_dialog__WEBPACK_IMPORTED_MODULE_2__.DialogHeader, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_dialog__WEBPACK_IMPORTED_MODULE_2__.DialogTitle, { className: "text-xl font-semibold text-slate-200", children: metadata.title }) }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "grid grid-cols-2 gap-6 items-center p-6", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "col-span-1 border-[1px] w-fit h-fit border-neutral-400", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ipfsMedia__WEBPACK_IMPORTED_MODULE_5__.IPFSMedia, { src: metadata.image, type: "image", className: "w-full h-full object-cover rounded-lg", alt: metadata.title }) }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "col-span-1", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.Tabs, { defaultValue: "info", className: "w-72", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsList, { className: 'bg-black/30 text-neutral-300', children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsTrigger, { value: "info", children: "Info" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsTrigger, { value: "track", children: "Track & Credits" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsTrigger, { value: "json", children: "JSON" })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_scroll_area__WEBPACK_IMPORTED_MODULE_3__.ScrollArea, { className: "h-[400px] pr-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsContent, { value: "info", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.Card, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.CardContent, { className: "space-y-4 pt-6", children: [metadata.genres.length > 0 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "flex flex-wrap gap-2", children: metadata.genres.map(function (genre, i) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_badge__WEBPACK_IMPORTED_MODULE_6__.Badge, { variant: "outline", className: "bg-blue-900/50", children: genre }, i)); }) })), metadata.releaseInfo.collection && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Collection: ", metadata.releaseInfo.collection] })), metadata.artists.length > 0 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", { className: "text-sm font-medium text-slate-400 mb-2", children: "Artists" }), metadata.artists.map(function (artist, i) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "text-slate-200", children: artist }, i)); })] })), Object.keys(metadata.links).length > 0 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", { className: "text-sm font-medium text-slate-400 mb-2", children: "Links" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "flex flex-wrap gap-2", children: Object.entries(metadata.links).map(function (_a) {
+    var copyrightData = songData.copyright || release.copyright;
+    if (typeof copyrightData === 'string') {
+        metadata.copyright = { text: copyrightData };
+    }
+    else if (copyrightData && typeof copyrightData === 'object') {
+        metadata.copyright = {
+            master: typeof copyrightData.master === 'string' ? copyrightData.master : '',
+            composition: typeof copyrightData.composition === 'string' ? copyrightData.composition : ''
+        };
+    }
+    var trackData = {
+        title: typeof songData.song_title === 'string' ? songData.song_title || '' :
+            (typeof songFile.name === 'string' ? songFile.name || '' : ''),
+        duration: songData.song_duration || '',
+        number: songData.track_number || '',
+        src: songFile.src || '',
+        mediaType: songFile.mediaType || '',
+        isExplicit: (release.parental_advisory === 'Explicit') || false,
+        isrc: songData.isrc || '',
+        iswc: songData.iswc || ''
+    };
+    var tokenMetadata = {
+        "721": (_b = {},
+            _b[asset.policy_id] = (_c = {},
+                _c[asset.asset_name] = parsedData,
+                _c),
+            _b)
+    };
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_dialog__WEBPACK_IMPORTED_MODULE_2__.Dialog, { open: isOpen, onOpenChange: function (open) { return !open && onClose(); }, children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_dialog__WEBPACK_IMPORTED_MODULE_2__.DialogContent, { className: "bg-slate-700 border-slate-800 flex flex-col items-center border border-neutral-400 w-[95vw] sm:w-[90vw] min-w-[50dvw] md:w-fit max-w-3xl p-4 sm:p-6", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_dialog__WEBPACK_IMPORTED_MODULE_2__.DialogHeader, { className: "w-full flex flex-row justify-between items-center mb-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_dialog__WEBPACK_IMPORTED_MODULE_2__.DialogTitle, { className: "text-lg sm:text-xl font-semibold text-slate-200 line-clamp-2", children: metadata.title }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: onClose, className: "rounded-full p-1 hover:bg-slate-600 transition-colors" })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "w-full flex flex-col md:flex-row md:gap-6 items-center md:items-start", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "w-full md:w-2/5 mb-4 md:mb-0 border-[1px] items-center border-neutral-400 flex-shrink-0", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ipfsMedia__WEBPACK_IMPORTED_MODULE_5__.IPFSMedia, { src: metadata.image, type: "image", className: "w-full aspect-square object-cover rounded-lg", alt: metadata.title }) }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "w-full md:w-3/5", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.Tabs, { defaultValue: "info", className: "w-full", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsList, { className: "bg-black/30 text-neutral-300 w-full flex", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsTrigger, { value: "info", className: "flex-1", children: "Info" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsTrigger, { value: "track", className: "flex-1", children: "Track & Credits" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsTrigger, { value: "json", className: "flex-1", children: "JSON" })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_scroll_area__WEBPACK_IMPORTED_MODULE_3__.ScrollArea, { className: "h-[280px] sm:h-[350px] pr-4 mt-2", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsContent, { value: "info", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.Card, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.CardContent, { className: "space-y-4 pt-4", children: [metadata.genres.length > 0 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "flex flex-wrap gap-2", children: metadata.genres.map(function (genre, i) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_badge__WEBPACK_IMPORTED_MODULE_6__.Badge, { variant: "outline", className: "bg-blue-900/50", children: String(genre) }, i)); }) })), metadata.releaseInfo.collection && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Collection: ", metadata.releaseInfo.collection] })), metadata.artists.length > 0 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", { className: "text-sm font-medium text-slate-400 mb-2", children: "Artists" }), metadata.artists.map(function (artist, i) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "text-slate-200", children: String(artist) }, i)); })] })), Object.keys(metadata.links).length > 0 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h4", { className: "text-sm font-medium text-slate-400 mb-2", children: "Links" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "flex flex-wrap gap-2", children: Object.entries(metadata.links).map(function (_a) {
                                                                             var platform = _a[0], url = _a[1];
-                                                                            return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", { href: typeof url === 'string' ? url : Array.isArray(url) ? url[0] : '#', target: "_blank", rel: "noopener noreferrer", className: "flex items-center gap-1 px-2 py-1 bg-slate-800 rounded text-sm text-blue-400 hover:bg-slate-700", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_8__["default"], { className: "h-3 w-3" }), platform] }, platform));
-                                                                        }) })] }))] }) }) }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsContent, { value: "track", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "space-y-4", children: [metadata.track.src && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ipfsMedia__WEBPACK_IMPORTED_MODULE_5__.IPFSMedia, { src: metadata.track.src, type: "audio", alt: metadata.track.title, isrc: metadata.track.isrc, iswc: metadata.track.iswc, isExplicit: metadata.track.isExplicit })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.Card, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.CardContent, { className: "space-y-2 pt-4", children: [metadata.releaseInfo.producer && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Producer: ", metadata.releaseInfo.producer] })), metadata.releaseInfo.mix_engineer && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Mix: ", metadata.releaseInfo.mix_engineer] })), metadata.releaseInfo.mastering_engineer && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Master: ", metadata.releaseInfo.mastering_engineer] })), metadata.releaseInfo.visual_artist && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Visual Artist: ", metadata.releaseInfo.visual_artist] })), metadata.copyright && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "text-sm text-slate-300", children: typeof metadata.copyright === 'string' ?
-                                                                            metadata.copyright :
-                                                                            (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, { children: [metadata.copyright.master, (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("br", {}), metadata.copyright.composition] }) }))] }) })] }) }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsContent, { value: "json", className: "w-72", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.Card, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.CardContent, { className: "space-y-4 w-64 pt-6", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: function () {
-                                                                    var _a, _b;
-                                                                    var formattedJson = {
-                                                                        "721": (_a = {},
-                                                                            _a[asset.policy_id] = (_b = {},
-                                                                                _b[asset.asset_name] = parsedData,
-                                                                                _b),
-                                                                            _a)
-                                                                    };
-                                                                    navigator.clipboard.writeText(JSON.stringify(formattedJson, null, 2));
-                                                                }, className: " w-fit text-xs bg-blue-600 hover:bg-blue-700 text-white p-2 rounded transition-colors", children: "Copy JSON" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("pre", { className: "text-xs text-slate-300 whitespace-pre-wrap font-mono", children: JSON.stringify({
-                                                                    "721": (_b = {},
-                                                                        _b[asset.policy_id] = (_c = {},
-                                                                            _c[asset.asset_name] = parsedData,
-                                                                            _c),
-                                                                        _b)
-                                                                }, null, 2) })] }) }) })] })] }) })] })] }) }));
+                                                                            var href = typeof url === 'string' ? url :
+                                                                                Array.isArray(url) && url.length > 0 && typeof url[0] === 'string' ? url[0] : '#';
+                                                                            return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", { href: href, target: "_blank", rel: "noopener noreferrer", className: "flex items-center gap-1 px-2 py-1 bg-slate-800 rounded text-sm text-blue-400 hover:bg-slate-700", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_8__["default"], { className: "h-3 w-3" }), platform] }, platform));
+                                                                        }) })] }))] }) }) }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsContent, { value: "track", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "space-y-4", children: [trackData.src && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "w-full", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ipfsMedia__WEBPACK_IMPORTED_MODULE_5__.IPFSMedia, { src: trackData.src, type: "audio", alt: trackData.title, isrc: trackData.isrc, iswc: trackData.iswc, isExplicit: trackData.isExplicit }) })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.Card, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.CardContent, { className: "space-y-2 pt-4", children: [metadata.releaseInfo.producer && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Producer: ", metadata.releaseInfo.producer] })), metadata.releaseInfo.mix_engineer && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Mix: ", metadata.releaseInfo.mix_engineer] })), metadata.releaseInfo.mastering_engineer && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Master: ", metadata.releaseInfo.mastering_engineer] })), metadata.releaseInfo.visual_artist && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-sm text-slate-300", children: ["Visual Artist: ", metadata.releaseInfo.visual_artist] })), metadata.copyright && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "text-sm text-slate-300", children: metadata.copyright.text ? (metadata.copyright.text) : ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, { children: [metadata.copyright.master && (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { children: metadata.copyright.master }), metadata.copyright.composition && (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { children: metadata.copyright.composition })] })) }))] }) })] }) }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_tabs__WEBPACK_IMPORTED_MODULE_7__.TabsContent, { value: "json", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.Card, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(_ui_card__WEBPACK_IMPORTED_MODULE_4__.CardContent, { className: "space-y-4 pt-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: function () {
+                                                                    navigator.clipboard.writeText(JSON.stringify(tokenMetadata));
+                                                                }, className: "w-fit text-xs bg-blue-600 hover:bg-blue-700 text-white p-2 rounded transition-colors", children: "Copy JSON" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("pre", { className: "text-xs text-slate-300 whitespace-pre-wrap font-mono overflow-x-auto", children: JSON.stringify(tokenMetadata, null, 2) })] }) }) })] })] }) })] })] }) }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AssetModal);
 
 
 /***/ }),
 
-/***/ "./src/components/Dashboard.tsx":
-/*!**************************************!*\
-  !*** ./src/components/Dashboard.tsx ***!
-  \**************************************/
+/***/ "./src/components/AssetsSearch.tsx":
+/*!*****************************************!*\
+  !*** ./src/components/AssetsSearch.tsx ***!
+  \*****************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   AssetsSearch: () => (/* binding */ AssetsSearch),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/search.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/box.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/clock.js");
-/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/database.js");
 /* harmony import */ var _AssetModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AssetModal */ "./src/components/AssetModal.tsx");
-var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36014,13 +36039,87 @@ var AssetsSearch = function () {
         var timeoutId = setTimeout(fetchAssets, 500);
         return function () { return clearTimeout(timeoutId); };
     }, [searchTerm]);
-    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "relative m-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "text", placeholder: "Search asset name", value: searchTerm, onChange: function (e) { return setSearchTerm(e.target.value); }, className: "w-full p-2 pl-10 bg-slate-700 text-slate-200 rounded" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], { className: "absolute left-3 top-3 text-slate-400", size: 20 })] }), assets.length > 0 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "bg-slate-800 rounded-lg border-[1px] border-neutral-500 shadow p-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h3", { className: "text-lg font-semibold text-slate-200 mb-4", children: "Search Results" }), assets.map(function (asset) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "mb-2 pb-2 border-b border-slate-700 last:border-b-0 cursor-pointer hover:bg-slate-700 rounded p-2 transition-colors", onClick: function () { return setSelectedAsset(asset); }, children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-slate-200", children: asset.asset_name }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("p", { className: "text-slate-400 text-sm", children: ["Version: ", asset.metadata_version] })] }, "".concat(asset.policy_id, "-").concat(asset.asset_name))); })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_AssetModal__WEBPACK_IMPORTED_MODULE_2__["default"], { asset: selectedAsset, isOpen: !!selectedAsset, onClose: function () { return setSelectedAsset(null); } }) })] }));
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "relative m-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("input", { type: "text", placeholder: "Search asset name", value: searchTerm, onChange: function (e) { return setSearchTerm(e.target.value); }, className: "w-full p-2 pl-10 bg-slate-700 text-slate-200 rounded" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_3__["default"], { className: "absolute left-3 top-3 text-slate-400", size: 20 })] }), assets.length > 0 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "bg-slate-800 rounded-lg border-[1px] border-neutral-500 shadow p-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h3", { className: "text-lg font-semibold text-slate-200 mb-4", children: "Search Results" }), assets.map(function (asset) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "mb-2 pb-2 border-b border-slate-700 last:border-b-0 cursor-pointer hover:bg-slate-700 rounded p-2 transition-colors", onClick: function () { return setSelectedAsset(asset); }, children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-slate-200", children: asset.asset_name }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("p", { className: "text-slate-400 text-sm", children: ["Version: ", asset.metadata_version] })] }, "".concat(asset.policy_id, "-").concat(asset.asset_name))); })] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_AssetModal__WEBPACK_IMPORTED_MODULE_2__["default"], { asset: selectedAsset, isOpen: !!selectedAsset, onClose: function () { return setSelectedAsset(null); } })] }));
 };
-var StatCard = function (_a) {
-    var title = _a.title, value = _a.value, subtitle = _a.subtitle, icon = _a.icon;
-    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("article", { className: "bg-slate-800 p-4 rounded-lg shadow border-[1px] border-neutral-500", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "flex items-center justify-between mb-2", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h3", { className: "text-sm font-medium text-slate-400", children: title }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "text-slate-500", children: icon })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "text-2xl font-bold text-slate-200", children: value }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-xs text-slate-400 mt-1", children: subtitle })] }));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AssetsSearch);
+
+
+/***/ }),
+
+/***/ "./src/components/Dashboard.tsx":
+/*!**************************************!*\
+  !*** ./src/components/Dashboard.tsx ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/box.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/clock.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/database.js");
+/* harmony import */ var _StatCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StatCard */ "./src/components/StatCard.tsx");
+/* harmony import */ var _RecentAssetsModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RecentAssetsModal */ "./src/components/RecentAssetsModal.tsx");
+/* harmony import */ var _AssetsSearch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./AssetsSearch */ "./src/components/AssetsSearch.tsx");
+/* harmony import */ var _SyncStatus__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SyncStatus */ "./src/components/SyncStatus.tsx");
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
-var MemoizedStatCard = react__WEBPACK_IMPORTED_MODULE_1___default().memo(StatCard);
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
+    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+
 var Dashboard = function () {
     var _a = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
         blockHeight: 0,
@@ -36030,11 +36129,15 @@ var Dashboard = function () {
         syncProgress: 0,
         lastProcessedBlock: '',
         networkTip: 0,
-        currentSlot: 0
+        currentSlot: 0,
+        lastUpdated: new Date()
     }), stats = _a[0], setStats = _a[1];
+    var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false), showRecentAssets = _b[0], setShowRecentAssets = _b[1];
+    var _c = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]), recentAssets = _c[0], setRecentAssets = _c[1];
+    var _d = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false), isLoadingAssets = _d[0], setIsLoadingAssets = _d[1];
     (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
         var fetchStats = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var response, data_1, error_2;
+            var response, data_1, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -36056,8 +36159,8 @@ var Dashboard = function () {
                         });
                         return [3 /*break*/, 4];
                     case 3:
-                        error_2 = _a.sent();
-                        console.error('Error fetching stats:', error_2);
+                        error_1 = _a.sent();
+                        console.error('Error fetching stats:', error_1);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }
@@ -36067,19 +36170,146 @@ var Dashboard = function () {
         var interval = setInterval(fetchStats, 100);
         return function () { return clearInterval(interval); };
     }, []);
+    var fetchRecentAssets = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response, data, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    setIsLoadingAssets(true);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, 5, 6]);
+                    return [4 /*yield*/, fetch('/api/assets/recent')];
+                case 2:
+                    response = _a.sent();
+                    return [4 /*yield*/, response.json()];
+                case 3:
+                    data = _a.sent();
+                    setRecentAssets(data);
+                    setShowRecentAssets(true);
+                    return [3 /*break*/, 6];
+                case 4:
+                    error_2 = _a.sent();
+                    console.error('Error fetching recent assets:', error_2);
+                    return [3 /*break*/, 6];
+                case 5:
+                    setIsLoadingAssets(false);
+                    return [7 /*endfinally*/];
+                case 6: return [2 /*return*/];
+            }
+        });
+    }); }, []);
     var progress = (0,react__WEBPACK_IMPORTED_MODULE_1__.useMemo)(function () {
         if (stats.networkTip === 0)
             return 0;
         return (stats.slot / stats.networkTip) * 100;
     }, [stats.slot, stats.networkTip]);
     var statCards = (0,react__WEBPACK_IMPORTED_MODULE_1__.useMemo)(function () { return [
-        { title: 'Block Height', value: stats.blockHeight.toLocaleString(), subtitle: 'Current blockchain height', icon: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], { size: 20 }) },
-        { title: 'Current Epoch', value: stats.epoch.toLocaleString(), subtitle: 'Cardano epoch', icon: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], { size: 20 }) },
-        { title: 'Processed Assets', value: stats.processedAssets.toLocaleString(), subtitle: 'Total indexed NFTs', icon: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], { size: 20 }) }
-    ]; }, [stats]);
-    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("main", { className: "min-h-screen bg-slate-900 p-4 md:p-8", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "max-w-7xl mx-auto", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("header", { className: "mb-8", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", { className: "text-[1.8rem] font-bold text-slate-100 mb-2", children: "CIP-60 Music Token Indexer" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("hr", { className: "w-96" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-slate-400", children: "Monitoring Cardano blockchain music assets" })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "grid grid-cols-1 md:grid-cols-3  gap-6 mb-8", children: statCards.map(function (card, index) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(MemoizedStatCard, __assign({}, card), index)); }) }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("article", { className: "bg-slate-800 rounded-lg border-[1px] border-neutral-500 shadow p-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h2", { className: "text-lg font-semibold  text-slate-200 mb-4", children: "Sync Status" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "space-y-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "flex flex-col w-full  m-8 md:flex-row md:justify-evenly", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-sm font-medium text-slate-400 mb-1", children: "Current Slot" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-lg font-semibold text-slate-200", children: stats.slot.toLocaleString() })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-sm font-medium text-slate-400 mb-1", children: "Network Tip" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-lg font-semibold text-slate-200", children: stats.networkTip.toLocaleString() })] })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "flex items-center", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-sm font-medium mr-4 text-end text-slate-400", children: "Sync Progress" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-lg font-bold w-96 text-slate-200", children: [progress.toFixed(2), "%"] })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "h-2 bg-slate-700 rounded-full mt-2", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "h-full bg-blue-500 rounded-full transition-all duration-500", style: { width: "".concat(progress, "%") } }) })] })] })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(AssetsSearch, {})] }) }));
+        { title: 'Block Height', value: stats.blockHeight.toLocaleString(), subtitle: 'Current blockchain height', icon: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], { size: 20 }) },
+        { title: 'Current Epoch', value: stats.epoch.toLocaleString(), subtitle: 'Cardano epoch', icon: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_7__["default"], { size: 20 }) },
+        {
+            title: 'Processed Assets',
+            value: stats.processedAssets.toLocaleString(),
+            subtitle: 'Total indexed NFTs',
+            icon: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_8__["default"], { size: 20 }),
+            onClick: fetchRecentAssets
+        }
+    ]; }, [stats, fetchRecentAssets]);
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("main", { className: "min-h-screen bg-slate-900 p-4 md:p-8", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "max-w-7xl mx-auto", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("header", { className: "mb-8", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h1", { className: "text-[1.8rem] font-bold text-slate-100 mb-2", children: "CIP-60 Music Token Indexer" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("hr", { className: "w-96" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-slate-400", children: "Monitoring Cardano blockchain music assets" })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6 mb-8", children: statCards.map(function (card, index) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_StatCard__WEBPACK_IMPORTED_MODULE_2__["default"], __assign({}, card), index)); }) }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_SyncStatus__WEBPACK_IMPORTED_MODULE_5__["default"], { stats: stats, progress: progress }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_AssetsSearch__WEBPACK_IMPORTED_MODULE_4__["default"], {}), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_RecentAssetsModal__WEBPACK_IMPORTED_MODULE_3__["default"], { isOpen: showRecentAssets, onClose: function () { return setShowRecentAssets(false); }, assets: recentAssets, isLoading: isLoadingAssets })] }) }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Dashboard);
+
+
+/***/ }),
+
+/***/ "./src/components/RecentAssetsModal.tsx":
+/*!**********************************************!*\
+  !*** ./src/components/RecentAssetsModal.tsx ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/x.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/music.js");
+/* harmony import */ var _AssetModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AssetModal */ "./src/components/AssetModal.tsx");
+/* harmony import */ var _utils_AssetHelpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/AssetHelpers */ "./src/utils/AssetHelpers.ts");
+
+
+
+
+
+var RecentAssetsModal = function (_a) {
+    var isOpen = _a.isOpen, onClose = _a.onClose, assets = _a.assets, isLoading = _a.isLoading;
+    var _b = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null), selectedAsset = _b[0], setSelectedAsset = _b[1];
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+        if (!isOpen) {
+            setSelectedAsset(null);
+        }
+    }, [isOpen]);
+    if (!isOpen)
+        return null;
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.Fragment, { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "bg-slate-800 rounded-lg border-[1px] border-neutral-500 shadow p-4 max-w-4xl w-full max-h-[90vh] overflow-y-auto", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "flex justify-between items-center mb-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h2", { className: "text-lg font-semibold text-slate-200", children: "Recent Assets" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", { onClick: onClose, className: "text-slate-400 hover:text-slate-200", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_4__["default"], { size: 20 }) })] }), isLoading ? ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-center p-8", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mb-2" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-slate-400", children: "Loading recent assets..." })] })) : assets.length === 0 ? ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-slate-400 text-center p-4", children: "No recent assets found" })) : ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4", children: assets.map(function (asset) {
+                                var imageUrl = (0,_utils_AssetHelpers__WEBPACK_IMPORTED_MODULE_3__.getAssetImage)(asset);
+                                var displayName = (0,_utils_AssetHelpers__WEBPACK_IMPORTED_MODULE_3__.getAssetName)(asset);
+                                var genres = (0,_utils_AssetHelpers__WEBPACK_IMPORTED_MODULE_3__.getMusicGenres)(asset);
+                                return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "bg-slate-700 rounded-lg p-4 cursor-pointer hover:bg-slate-600 transition-colors", onClick: function () { return setSelectedAsset(asset); }, children: [imageUrl ? ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("img", { src: imageUrl, alt: displayName, className: "w-auto h-[75px] object-cover rounded mb-2", onError: function (e) {
+                                                e.currentTarget.onerror = null;
+                                                e.currentTarget.src = "./default.png";
+                                            } })) : ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "w-full h-40 bg-slate-600 rounded mb-2 flex items-center justify-center", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(lucide_react__WEBPACK_IMPORTED_MODULE_5__["default"], { size: 40, className: "text-slate-400" }) })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-slate-200 font-medium truncate", children: displayName }), genres.length > 0 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "flex flex-wrap gap-1 mt-2", children: [genres.slice(0, 2).map(function (genre, i) { return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", { className: "text-xs bg-slate-800 text-blue-400 px-2 py-0.5 rounded", children: genre }, i)); }), genres.length > 2 && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("span", { className: "text-xs bg-slate-800 text-blue-400 px-2 py-0.5 rounded", children: ["+", genres.length - 2] }))] })), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("p", { className: "text-slate-400 text-xs truncate mt-2", children: ["Policy: ", asset.policy_id.slice(0, 8), "...", asset.policy_id.slice(-8)] })] }, "".concat(asset.policy_id, "-").concat(asset.asset_name)));
+                            }) }))] }) }), selectedAsset && ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_AssetModal__WEBPACK_IMPORTED_MODULE_2__["default"], { asset: selectedAsset, isOpen: !!selectedAsset, onClose: function () { return setSelectedAsset(null); } }))] }));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RecentAssetsModal);
+
+
+/***/ }),
+
+/***/ "./src/components/StatCard.tsx":
+/*!*************************************!*\
+  !*** ./src/components/StatCard.tsx ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var StatCard = function (_a) {
+    var title = _a.title, value = _a.value, subtitle = _a.subtitle, icon = _a.icon, onClick = _a.onClick;
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("article", { className: "bg-slate-800 p-4 rounded-lg shadow border-[1px] border-neutral-500 ".concat(onClick ? 'cursor-pointer hover:bg-slate-700 transition-colors' : ''), onClick: onClick, children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "flex items-center justify-between mb-2", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h3", { className: "text-sm font-medium text-slate-400", children: title }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "text-slate-500", children: icon })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "text-2xl font-bold text-slate-200", children: value }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-xs text-slate-400 mt-1", children: subtitle })] }));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (react__WEBPACK_IMPORTED_MODULE_1___default().memo(StatCard));
+
+
+/***/ }),
+
+/***/ "./src/components/SyncStatus.tsx":
+/*!***************************************!*\
+  !*** ./src/components/SyncStatus.tsx ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+var SyncStatus = function (_a) {
+    var stats = _a.stats, progress = _a.progress;
+    return ((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("article", { className: "bg-slate-800 rounded-lg border-[1px] border-neutral-500 shadow p-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("h2", { className: "text-lg font-semibold text-slate-200 mb-4", children: "Sync Status" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "space-y-4", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "flex flex-col w-full m-8 md:flex-row md:justify-evenly", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-sm font-medium text-slate-400 mb-1", children: "Current Slot" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-lg font-semibold text-slate-200", children: stats.slot.toLocaleString() })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-sm font-medium text-slate-400 mb-1", children: "Network Tip" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-lg font-semibold text-slate-200", children: stats.networkTip.toLocaleString() })] })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "flex items-center", children: [(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("p", { className: "text-sm font-medium mr-4 text-end text-slate-400", children: "Sync Progress" }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", { className: "text-lg font-bold w-96 text-slate-200", children: [progress.toFixed(2), "%"] })] }), (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "h-2 bg-slate-700 rounded-full mt-2", children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", { className: "h-full bg-blue-500 rounded-full transition-all duration-500", style: { width: "".concat(progress, "%") } }) })] })] })] }));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SyncStatus);
 
 
 /***/ }),
@@ -36568,6 +36798,76 @@ function cn() {
     }
     return (0,tailwind_merge__WEBPACK_IMPORTED_MODULE_1__.twMerge)((0,clsx__WEBPACK_IMPORTED_MODULE_0__.clsx)(inputs));
 }
+
+
+/***/ }),
+
+/***/ "./src/utils/AssetHelpers.ts":
+/*!***********************************!*\
+  !*** ./src/utils/AssetHelpers.ts ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getAssetImage: () => (/* binding */ getAssetImage),
+/* harmony export */   getAssetName: () => (/* binding */ getAssetName),
+/* harmony export */   getMusicGenres: () => (/* binding */ getMusicGenres)
+/* harmony export */ });
+var getAssetImage = function (asset) {
+    var _a;
+    try {
+        if (!asset.metadata_json)
+            return null;
+        var metadata = typeof asset.metadata_json === 'string'
+            ? JSON.parse(asset.metadata_json)
+            : asset.metadata_json;
+        var image = metadata.image ||
+            (metadata.files && ((_a = metadata.files[0]) === null || _a === void 0 ? void 0 : _a.src)) ||
+            metadata.mediaUrl ||
+            null;
+        return image;
+    }
+    catch (error) {
+        console.error('Error parsing metadata:', error);
+        return null;
+    }
+};
+var getAssetName = function (asset) {
+    try {
+        if (!asset.metadata_json)
+            return asset.asset_name;
+        var metadata = typeof asset.metadata_json === 'string'
+            ? JSON.parse(asset.metadata_json)
+            : asset.metadata_json;
+        return metadata.name || asset.asset_name;
+    }
+    catch (error) {
+        return asset.asset_name;
+    }
+};
+var getMusicGenres = function (asset) {
+    var _a, _b;
+    try {
+        if (!asset.metadata_json)
+            return [];
+        var metadata = typeof asset.metadata_json === 'string'
+            ? JSON.parse(asset.metadata_json)
+            : asset.metadata_json;
+        if (metadata.release && Array.isArray(metadata.release.genres)) {
+            return metadata.release.genres;
+        }
+        if (metadata.files && ((_b = (_a = metadata.files[0]) === null || _a === void 0 ? void 0 : _a.song) === null || _b === void 0 ? void 0 : _b.genres)) {
+            return Array.isArray(metadata.files[0].song.genres)
+                ? metadata.files[0].song.genres
+                : [];
+        }
+        return [];
+    }
+    catch (error) {
+        return [];
+    }
+};
 
 
 /***/ }),
@@ -40451,6 +40751,40 @@ const Link = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("L
 
 /***/ }),
 
+/***/ "./node_modules/lucide-react/dist/esm/icons/music.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/icons/music.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __iconNode: () => (/* binding */ __iconNode),
+/* harmony export */   "default": () => (/* binding */ Music)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "./node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.474.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const __iconNode = [
+  ["path", { d: "M9 18V5l12-2v13", key: "1jmyc2" }],
+  ["circle", { cx: "6", cy: "18", r: "3", key: "fqmcym" }],
+  ["circle", { cx: "18", cy: "16", r: "3", key: "1hluhg" }]
+];
+const Music = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("Music", __iconNode);
+
+
+//# sourceMappingURL=music.js.map
+
+
+/***/ }),
+
 /***/ "./node_modules/lucide-react/dist/esm/icons/search.js":
 /*!************************************************************!*\
   !*** ./node_modules/lucide-react/dist/esm/icons/search.js ***!
@@ -43978,12 +44312,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var container = document.getElementById('root');
-if (!container) {
-    throw new Error('Failed to find root element');
-}
-var root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_2__.createRoot)(container);
-root.render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().StrictMode), { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Dashboard__WEBPACK_IMPORTED_MODULE_3__["default"], {}) }));
+react_dom_client__WEBPACK_IMPORTED_MODULE_2__.createRoot(document.getElementById('root')).render((0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().StrictMode), { children: (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(_components_Dashboard__WEBPACK_IMPORTED_MODULE_3__["default"], {}) }));
 
 })();
 

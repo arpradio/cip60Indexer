@@ -1,0 +1,274 @@
+{"level":"INFO","timestamp":"2025-03-11T17:36:25.057Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-11T17:36:25.059Z","message":"Testing database connection"}
+{"level":"CRITICAL","timestamp":"2025-03-11T17:36:25.068Z","message":"CRITICAL: Uncaught exception:","meta":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001}}
+{"level":"INFO","timestamp":"2025-03-11T17:36:25.099Z","message":"Received uncaughtException. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-11T17:36:25.100Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-11T17:36:25.144Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:36:25.145Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:36:25.146Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-11T17:36:25.146Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-11T17:36:25.147Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:00.424Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:00.426Z","message":"Testing database connection"}
+{"level":"CRITICAL","timestamp":"2025-03-11T17:37:00.433Z","message":"CRITICAL: Uncaught exception:","meta":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001}}
+{"level":"INFO","timestamp":"2025-03-11T17:37:00.445Z","message":"Received uncaughtException. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-11T17:37:00.446Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:00.468Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:00.469Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:00.470Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:00.471Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:00.471Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:56.593Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:56.596Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:56.625Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:56.626Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:56.638Z","message":"Loaded last state from database - Slot: 149295423, Hash: 3a80516d4b3be2d2aba9ec27c1ab804edc9dd73d2f3acfd299fc317537ce3507"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:56.639Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:56.647Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:37:56.651Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:56.651Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:57.664Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:57.669Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:37:57.671Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:57.672Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:58.672Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:58.689Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:37:58.691Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:58.692Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:59.701Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:59.707Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:37:59.708Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:37:59.709Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:00.722Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:00.726Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:00.728Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:00.728Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:01.733Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:01.737Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:01.739Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:01.739Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:02.754Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:02.759Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:02.760Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:02.761Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:03.770Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:03.777Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:03.779Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:03.779Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:04.783Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:04.790Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:04.792Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:04.792Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:05.807Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:05.812Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:05.813Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:05.813Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:06.662Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:06.816Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:06.820Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:06.822Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:06.822Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:07.673Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:07.827Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:07.831Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:07.832Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:07.833Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:08.695Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:08.846Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:08.850Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:08.852Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:08.853Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:09.719Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:09.856Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:09.861Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:09.862Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:09.863Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:10.729Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:10.865Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:10.869Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:10.870Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:10.871Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:11.743Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:11.882Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:11.886Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:11.887Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:11.888Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:12.772Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:12.893Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:12.899Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:12.912Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:12.913Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:13.792Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:13.916Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:13.921Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:13.922Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:13.922Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:14.801Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:14.926Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:14.931Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:14.932Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:14.933Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:15.826Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:15.947Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:15.960Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:15.961Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:15.961Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:16.833Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:16.971Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:16.976Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:16.977Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:16.978Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:17.847Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:17.990Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:17.994Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:17.995Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:17.995Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:18.851Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:19.007Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:19.011Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:19.012Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:19.013Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:19.865Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:20.023Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:20.026Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:20.027Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:20.028Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:20.875Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:21.031Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:21.035Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:21.036Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:21.036Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:21.898Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:22.052Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:22.056Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:22.057Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:22.058Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:22.902Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:23.074Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:23.083Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:23.084Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:23.085Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:23.930Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:24.086Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:24.091Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:24.092Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:24.093Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:24.935Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:25.108Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:25.113Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:25.114Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:25.115Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:25.973Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:26.130Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:26.141Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:26.142Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:26.143Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:26.984Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:27.155Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:27.160Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:27.161Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:27.161Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:28.005Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:28.161Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:28.165Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:28.166Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:28.167Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"ERROR","timestamp":"2025-03-11T17:38:29.015Z","message":"Failed to initialize chain after connection","meta":{}}
+{"level":"INFO","timestamp":"2025-03-11T17:38:29.170Z","message":"Connecting to Ogmios at ws://192.168.0.141:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:29.175Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:29.176Z","message":"WebSocket connection closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:29.177Z","message":"Scheduling reconnect in 1000ms (attempt 1)"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:29.264Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-11T17:38:29.265Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:29.266Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:29.267Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:29.267Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:29.268Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.134Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.137Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.165Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.166Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.169Z","message":"Loaded last state from database - Slot: 149295423, Hash: 3a80516d4b3be2d2aba9ec27c1ab804edc9dd73d2f3acfd299fc317537ce3507"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.170Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.180Z","message":"Connected to Ogmios"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:31.188Z","message":"Received invalid block data"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.190Z","message":"Network block height: 11590172"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.191Z","message":"Starting chain sync with 7 points, latest slot: 149295423"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:31.238Z","message":"Received invalid block data"}
+{"level":"INFO","timestamp":"2025-03-11T17:38:31.242Z","message":"Intersection found"}
+{"level":"WARN","timestamp":"2025-03-11T17:38:31.244Z","message":"Received invalid block data"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:07.264Z","message":"Found CIP-60 Music Token: ecbbf584...2428adad - JukeBox544 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:07.698Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S31 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:07.746Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S32 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:07.797Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S33 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:07.847Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S34 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:07.934Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S35 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:07.947Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S36 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:07.996Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S37 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:08.058Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S38 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:08.106Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S39 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:08.157Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S40 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:08.188Z","message":"Saved state: Slot 149570000, Hash 2a45d51dfd93c35065b09cd8d5debc9a0225da571e9cde63d838d178152fb829"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:17.109Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S13 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:17.156Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S23 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:17.351Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S17 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:17.400Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite544S22 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:26.076Z","message":"Saved state: Slot 149740000, Hash 9515a052b17b45ad70fd13884cc6573ba6e5053acfc7fe2bc3aec722fc275248"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:30.355Z","message":"Saved state: Slot 149790000, Hash fdca9dc34b9c65a4c14613d8f79d932bb89682e9528ec0352570b47220451c20"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:55.856Z","message":"Found CIP-60 Music Token: ecbbf584...2428adad - JukeBox545 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.046Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S31 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.095Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S32 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.145Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S33 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.196Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S34 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.245Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S35 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.294Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S36 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.345Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S37 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.396Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S38 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.445Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S39 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:57.495Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S40 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:59.565Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S06 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:59.615Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S17 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:59.665Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S07 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:39:59.715Z","message":"Found CIP-60 Music Token: b3018fa9...ae581c3a - JukeBoxElite545S13 (v3)"}
+{"level":"INFO","timestamp":"2025-03-11T17:40:01.684Z","message":"Saved state: Slot 150110000, Hash ceb2f033a4d2cec350cb378115ca793abcdf6c999f3752b4f0e1607edf627a49"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:13.448Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-11T17:42:13.449Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:13.513Z","message":"Saved state: Slot 150148636, Hash 448e627503e242b33e1e76d07b86d8fe1a2ff161e2ecf679fd38f8a66fdb7731"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:13.515Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:13.516Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:13.517Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:13.517Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.352Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.354Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.383Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.385Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.390Z","message":"Loaded last state from database - Slot: 150148636, Hash: 448e627503e242b33e1e76d07b86d8fe1a2ff161e2ecf679fd38f8a66fdb7731"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.391Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.406Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.411Z","message":"Network block height: 11590182"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.412Z","message":"Starting chain sync with 7 points, latest slot: 150148636"}
+{"level":"INFO","timestamp":"2025-03-11T17:42:18.416Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:07.622Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-11T17:45:07.623Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:07.685Z","message":"Saved state: Slot 150148704, Hash 58b4091ea7a2ecee30a921aa97581ec52f5d946f4934481d198d06cc5523df15"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:07.687Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:07.688Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:07.688Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:07.689Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.128Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.130Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.158Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.159Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.163Z","message":"Loaded last state from database - Slot: 150148704, Hash: 58b4091ea7a2ecee30a921aa97581ec52f5d946f4934481d198d06cc5523df15"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.164Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.173Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.179Z","message":"Network block height: 11590184"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.181Z","message":"Starting chain sync with 7 points, latest slot: 150148704"}
+{"level":"INFO","timestamp":"2025-03-11T17:45:11.184Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-11T17:49:33.318Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-11T17:49:33.320Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-11T17:49:33.383Z","message":"Saved state: Slot 150149060, Hash 4421c3689b70f1024b2153e33b88081bf8b6f6d314f9b23fde2dc7b77209b25f"}
+{"level":"INFO","timestamp":"2025-03-11T17:49:33.384Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:49:33.386Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-11T17:49:33.386Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-11T17:49:33.387Z","message":"Graceful shutdown completed"}

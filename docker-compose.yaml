@@ -1,0 +1,59 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: cip60-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-cip60}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./cip60.sql:/docker-entrypoint-initdb.d/cip60.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ogmios:
+    image: cardanosolutions/cardano-node-ogmios:latest
+    container_name: cip60-ogmios
+    restart: unless-stopped
+    environment:
+      - NETWORK=${CARDANO_NETWORK:-mainnet}
+    volumes:
+      - cardano-node-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:1337/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  indexer:
+    build: .
+    container_name: cip60-indexer
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ogmios:
+        condition: service_healthy
+    environment:
+      - OGMIOS_URL=ws://ogmios:1337
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME:-cip60}
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+
+volumes:
+  postgres-data:
+  cardano-node-data:

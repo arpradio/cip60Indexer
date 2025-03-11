@@ -50,6 +50,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
+CREATE INDEX IF NOT EXISTS idx_assets_asset_name_trgm ON cip60.assets USING GIN (asset_name gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_assets_metadata_json_gin ON cip60.assets USING GIN (metadata_json jsonb_path_ops);
+
+-- For sorting by creation date
+CREATE INDEX IF NOT EXISTS idx_assets_created_at ON cip60.assets (created_at DESC);
+
+-- For policy_id lookup performance
+CREATE INDEX IF NOT EXISTS idx_assets_policy_composite ON cip60.assets (policy_id, asset_name);
+=======
+
+
 -- Trigger to update updated_at only after an update
 CREATE TRIGGER update_assets_updated_at
 AFTER UPDATE ON cip60.assets
