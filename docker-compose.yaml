@@ -18,42 +18,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-  ogmios:
-    image: cardanosolutions/cardano-node-ogmios:latest
-    container_name: cip60-ogmios
-    restart: unless-stopped
-    environment:
-      - NETWORK=${CARDANO_NETWORK:-mainnet}
-    volumes:
-      - cardano-node-data:/data
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:1337/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  indexer:
-    build: .
-    container_name: cip60-indexer
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-      ogmios:
-        condition: service_healthy
-    environment:
-      - OGMIOS_URL=ws://ogmios:1337
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=${DB_USER:-postgres}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME:-cip60}
-      - NODE_ENV=production
-    ports:
-      - "3000:3000"
-      - "3001:3001"
-
+ 
 volumes:
   postgres-data:
-  cardano-node-data:
