@@ -1,23 +1,44 @@
-# docker-compose.yml
-version: '3.8'
-
 services:
   postgres:
     image: postgres:14
-    container_name: cip60-postgres
-    restart: unless-stopped
+    container_name: cip60-db
+    ports:
+      - "5432:5432"
     environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME:-cip60}
+      - POSTGRES_DB=cip60
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=C@RD@N0123
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./cip60.sql:/docker-entrypoint-initdb.d/cip60.sql
+      - ./init-db:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
- 
+    networks:
+      - cip60-network
+    restart: always
+  cardano-ogmios:
+    image: cardanosolutions/cardano-node-ogmios:v6.11.2_10.1.4-mainnet
+    container_name: cardano
+    ports:
+      - "1337:1337"
+    volumes:
+      - ogmios-db:/db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1337"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - cip60-network
+    restart: always
+
 volumes:
+  ogmios-db:
   postgres-data:
+
+networks:
+  cip60-network:
+    driver: bridge
