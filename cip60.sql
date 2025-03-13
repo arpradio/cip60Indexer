@@ -1,10 +1,3 @@
--- Ensure the database exists
-CREATE DATABASE cip60;
-
--- Connect to the database
-\c cip60;
-
--- Enable pg_trgm extension for GIN index optimization (if not already enabled)
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 -- Create schema
