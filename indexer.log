@@ -375,3 +375,21 @@
 {"level":"INFO","timestamp":"2025-03-15T16:10:52.366Z","message":"Progress server closed"}
 {"level":"INFO","timestamp":"2025-03-15T16:10:52.367Z","message":"Indexer stopped successfully"}
 {"level":"INFO","timestamp":"2025-03-15T16:10:52.367Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.178Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.179Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.218Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.219Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.225Z","message":"Loaded last state from database - Slot: 1206517, Hash: e46aa6b6cb530f985de3c0361874a59a0c816cd12038cb2dc550a4b92f20dedf"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.225Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.234Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.238Z","message":"Network block height: 11606878"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.239Z","message":"Starting chain sync with 1 points, latest slot: 1206517"}
+{"level":"INFO","timestamp":"2025-03-15T16:34:54.298Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-15T16:46:36.074Z","message":"Saved state: Slot 2000000, Hash 2cfa70beeab6da6ad77f91eb41ce30375068c6e4bad757612a4d22786000c6f7"}
+{"level":"INFO","timestamp":"2025-03-15T16:53:21.083Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-15T16:53:21.084Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-15T16:53:21.148Z","message":"Saved state: Slot 2433216, Hash c53de61352b4074a628f5750f31153a6785e629c98b218fcc6372fe96c402f53"}
+{"level":"INFO","timestamp":"2025-03-15T16:53:21.149Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-15T16:53:21.151Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-15T16:53:21.151Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-15T16:53:21.151Z","message":"Graceful shutdown completed"}
