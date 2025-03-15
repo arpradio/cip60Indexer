@@ -107,7 +107,7 @@ class OgmiosConnection {
     async sendMessage(message: any): Promise<void> {
         try {
             await this.initialize();
-            
+
             if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
                 throw new Error('WebSocket is not ready');
             }
@@ -227,11 +227,11 @@ let networkStats = {
 ogmiosConnection.onMessage(async (data) => {
     try {
         const response = JSON.parse(data.toString());
-        
+
         if (response.id === "query-height") {
             networkStats.blockHeight = response.result;
             networkStats.lastUpdated = new Date();
-        } 
+        }
         else if (response.id === "query-epoch") {
             networkStats.epoch = response.result;
             networkStats.lastUpdated = new Date();
@@ -249,39 +249,32 @@ router.get('/stats', async (req, res) => {
     }
 });
 
-// In API server
-// Add health check endpoint
 router.get('/health', async (req, res) => {
     try {
-      // Check database connection
-      await pool.query('SELECT 1');
-      
-      // Check Ogmios connection
-      const ogmiosStatus = ogmiosConnection.isConnected() ? 'connected' : 'disconnected';
-      
-      // Return health status
-      res.json({
-        status: 'healthy',
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString(),
-        components: {
-          database: 'healthy',
-          ogmios: ogmiosStatus
-        }
-      });
+        await pool.query('SELECT 1');
+        const ogmiosStatus = ogmiosConnection.isConnected() ? 'connected' : 'disconnected';
+        res.json({
+            status: 'healthy',
+            uptime: process.uptime(),
+            timestamp: new Date().toISOString(),
+            components: {
+                database: 'healthy',
+                ogmios: ogmiosStatus
+            }
+        });
     } catch (error) {
-      res.status(500).json({
-        status: 'unhealthy',
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
+        res.status(500).json({
+            status: 'unhealthy',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
     }
-  });
+});
 
 router.get('/assets', async (req, res) => {
     try {
         const { search } = req.query;
         const searchTerm = search ? String(search).trim() : null;
-        
+
 
         const recentAssetsQuery = `
             SELECT
@@ -318,9 +311,9 @@ router.get('/assets', async (req, res) => {
         res.json(result.rows);
     } catch (error) {
         console.error('Error in /assets route:', error);
-        res.status(500).json({ 
-            error: 'Failed to fetch assets', 
-            details: error instanceof Error ? error.message : String(error) 
+        res.status(500).json({
+            error: 'Failed to fetch assets',
+            details: error instanceof Error ? error.message : String(error)
         });
     }
 });

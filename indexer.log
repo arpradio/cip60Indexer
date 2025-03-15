@@ -410,3 +410,99 @@
 {"level":"INFO","timestamp":"2025-03-15T17:18:40.554Z","message":"Progress server closed"}
 {"level":"INFO","timestamp":"2025-03-15T17:18:40.555Z","message":"Indexer stopped successfully"}
 {"level":"INFO","timestamp":"2025-03-15T17:18:40.555Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.036Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.038Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.082Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.082Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.088Z","message":"Loaded last state from database - Slot: 2942555, Hash: 8d7fd9abeed4911b9313eb14c66af7f618b6e5b8b0dcf8f7857dcd6163e58460"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.088Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.099Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.104Z","message":"Network block height: 11607004"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.105Z","message":"Starting chain sync with 1 points, latest slot: 2942555"}
+{"level":"INFO","timestamp":"2025-03-15T17:19:37.110Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-15T17:20:31.087Z","message":"Saved state: Slot 3000000, Hash b1e5ce4188253f5430dd80764042e9c9517e29aaca7f3ed9e94be0f1d9bfebef"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:53.051Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-15T17:33:53.053Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:53.121Z","message":"Saved state: Slot 3842504, Hash 32d6ec4fa34adc803b69c9a67df2bdc974f9e8526251554dea94cb292b1e1663"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:53.122Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:53.123Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:53.124Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:53.124Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.600Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.601Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.629Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.629Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.632Z","message":"Loaded last state from database - Slot: 3842504, Hash: 32d6ec4fa34adc803b69c9a67df2bdc974f9e8526251554dea94cb292b1e1663"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.633Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.646Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.650Z","message":"Network block height: 11607056"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.650Z","message":"Starting chain sync with 1 points, latest slot: 3842504"}
+{"level":"INFO","timestamp":"2025-03-15T17:33:57.654Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-15T17:34:57.658Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-15T17:34:57.659Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-15T17:34:57.737Z","message":"Saved state: Slot 3905457, Hash 7af4345284ddd31eb3493ec44f3e2070c24b7f2b041767384cc4c751bad4bf3a"}
+{"level":"INFO","timestamp":"2025-03-15T17:34:57.738Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:34:57.740Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:34:57.740Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-15T17:34:57.740Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.604Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.606Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.634Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.635Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.639Z","message":"No previous state found in database, using Allegra as starting point"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.640Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.655Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.659Z","message":"Network block height: 11607059"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.660Z","message":"Starting chain sync with 2 points, latest slot: 16588737"}
+{"level":"INFO","timestamp":"2025-03-15T17:35:14.674Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.626Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.628Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.664Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.664Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.668Z","message":"No previous state found in database, using Allegra as starting point"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.669Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.683Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.688Z","message":"Network block height: 11607064"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.688Z","message":"Starting chain sync with 2 points, latest slot: 16588737"}
+{"level":"INFO","timestamp":"2025-03-15T17:37:31.692Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:14.586Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-15T17:38:14.587Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:14.649Z","message":"Saved state: Slot 17403085, Hash b9e9155f257c33fa6746dd05146e0b2c3ec4f4f5021beb9e5a5dbe006cc746d2"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:14.650Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:14.651Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:14.652Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:14.652Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.441Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.443Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.474Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.474Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.477Z","message":"Loaded last state from database - Slot: 17403085, Hash: b9e9155f257c33fa6746dd05146e0b2c3ec4f4f5021beb9e5a5dbe006cc746d2"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.477Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.487Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.492Z","message":"Network block height: 11607067"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.492Z","message":"Starting chain sync with 3 points, latest slot: 17403085"}
+{"level":"INFO","timestamp":"2025-03-15T17:38:28.494Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:24.898Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-15T17:39:24.899Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:24.976Z","message":"Saved state: Slot 18356425, Hash 7ab3b73e7d3b8d947e6774571ff1e7a20c132b78a3553d5baee67b0daa27321a"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:24.977Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:24.978Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:24.978Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:24.978Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.615Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.617Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.645Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.645Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.649Z","message":"Loaded last state from database - Slot: 18356425, Hash: 7ab3b73e7d3b8d947e6774571ff1e7a20c132b78a3553d5baee67b0daa27321a"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.649Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.662Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.668Z","message":"Network block height: 11607070"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.669Z","message":"Starting chain sync with 3 points, latest slot: 18356425"}
+{"level":"INFO","timestamp":"2025-03-15T17:39:37.673Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-15T17:46:04.402Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-15T17:46:04.404Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-15T17:46:04.489Z","message":"Saved state: Slot 23975720, Hash 6b2059f1c84b37d7dd168869c68cde7bbed4adf0d9e72047b64d7adb12b5c6be"}
+{"level":"INFO","timestamp":"2025-03-15T17:46:04.490Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:46:04.491Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:46:04.491Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-15T17:46:04.492Z","message":"Graceful shutdown completed"}

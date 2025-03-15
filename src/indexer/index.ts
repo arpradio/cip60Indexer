@@ -40,15 +40,15 @@ interface WebSocketWithState extends WebSocket {
 
 const requiredEnvVars = ['DB_HOST', 'DB_PASSWORD', 'DB_NAME', 'OGMIOS_URL'];
 for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    console.error(`ERROR: Missing required environment variable: ${envVar}`);
-    process.exit(1);
-  }
+    if (!process.env[envVar]) {
+        console.error(`ERROR: Missing required environment variable: ${envVar}`);
+        process.exit(1);
+    }
 }
 
 const config = {
     ogmios: {
-        url: process.env.OGMIOS_URL || 'ws://localhost:1337',  
+        url: process.env.OGMIOS_URL || 'ws://localhost:1337',
         reconnectInterval: parseInt(process.env.OGMIOS_RECONNECT_INTERVAL || '5000'),
     },
     database: {
@@ -149,25 +149,25 @@ class ProgressServer {
         this.wss.on('connection', (ws: WebSocketWithState) => {
             ws.isAlive = true;
             ws.on('pong', () => { ws.isAlive = true; });
-            
+
             this.clients.add(ws);
-            
+
             ws.on('error', () => {
                 this.clients.delete(ws);
             });
-            
+
             ws.on('close', () => {
                 this.clients.delete(ws);
             });
         });
-        
+
         this.pingInterval = setInterval(() => {
             this.clients.forEach(ws => {
                 if (ws.isAlive === false) {
                     this.clients.delete(ws);
                     return ws.terminate();
                 }
-                
+
                 ws.isAlive = false;
                 ws.ping();
             });
@@ -194,7 +194,7 @@ class ProgressServer {
             clearInterval(this.pingInterval);
             this.pingInterval = null;
         }
-        
+
         this.clients.forEach(client => {
             try {
                 client.terminate();
@@ -202,7 +202,7 @@ class ProgressServer {
                 Logger.error('Error terminating client:', err);
             }
         });
-        
+
         this.clients.clear();
         this.wss.close();
         Logger.info('Progress server closed');
@@ -249,26 +249,34 @@ class MusicTokenIndexer {
         this.progressServer = new ProgressServer(config.api.progressPort);
     }
 
+    private readonly ALLEGRA_ERA = {
+        slot: 16588737,
+        hash: "4e9bbbb67e3ae262133d94c3da5bffce7b1127fc436e7433b87668dba34c354a"
+    };
+
     async start() {
         try {
             await this.testDatabaseConnection();
             const lastState = await this.loadLastState();
+
             if (lastState) {
+                // If we have a last state, use it
                 this.loadedSlot = Number(lastState.slot);
                 this.latestProcessedSlot = this.loadedSlot;
                 this.latestProcessedHash = lastState.hash;
                 Logger.info(`Loaded last state from database - Slot: ${this.latestProcessedSlot}, Hash: ${lastState.hash}`);
             } else {
-                this.loadedSlot = 52876752;
+                // No previous state found, use Allegra as starting point
+                this.loadedSlot = this.ALLEGRA_ERA.slot;
                 this.latestProcessedSlot = this.loadedSlot;
-                this.latestProcessedHash = "af192981f47a4150b4d4f96e2184050699febbbc31de18c3815bb5f338578ff6";
+                this.latestProcessedHash = this.ALLEGRA_ERA.hash;
                 Logger.info('No previous state found in database, using Allegra as starting point');
             }
-    
+
             if (!this.latestProcessedSlot || !this.latestProcessedHash) {
                 throw new Error('Failed to initialize state');
             }
-    
+
             this.connectToOgmios();
         } catch (error: unknown) {
             Logger.critical('Failed to start indexer', error);
@@ -414,7 +422,7 @@ class MusicTokenIndexer {
 
     private connectToOgmios() {
         Logger.info(`Connecting to Ogmios at ${this.ogmiosUrl}`);
-        
+
         this.cleanupWebsocket();
         this.ws = new WebSocket(this.ogmiosUrl);
         this.isProcessing = true;
@@ -423,7 +431,7 @@ class MusicTokenIndexer {
             try {
                 const response = JSON.parse(data.toString());
                 Logger.debug(`Received message type: ${response.id || 'no-id'}, has result: ${!!response.result}`);
-                
+
                 if (response.id === 'find-intersection') {
                     Logger.info('Intersection found');
                     this.requestNext();
@@ -489,7 +497,7 @@ class MusicTokenIndexer {
 
         const backoffTime = Math.min(1000 * Math.pow(2, this.retryCount), 60000); // Max 1 minute
         this.retryCount++;
-        
+
         Logger.info(`Scheduling reconnect in ${backoffTime}ms (attempt ${this.retryCount})`);
         this.reconnectTimer = setTimeout(() => {
             if (this.isProcessing) {
@@ -497,14 +505,15 @@ class MusicTokenIndexer {
             }
         }, backoffTime);
     }
-    
+
     private async startChainSync(retries = 0) {
         try {
             const points: Array<{ slot: number, id: string }> = [{
                 slot: Number(this.latestProcessedSlot),
                 id: this.latestProcessedHash
             }];
-    
+
+            // Add era boundaries as fallback points
             for (const eraBoundary of this.ERA_BOUNDARIES) {
                 if (eraBoundary.slot < this.latestProcessedSlot) {
                     points.push({
@@ -513,8 +522,10 @@ class MusicTokenIndexer {
                     });
                 }
             }
-    
+
+            // Sort points in descending order by slot (newer first)
             points.sort((a, b) => b.slot - a.slot);
+
             Logger.info(`Starting chain sync with ${points.length} points, latest slot: ${points[0].slot}`);
             this.sendMessage("findIntersection", { points }, "find-intersection");
         } catch (error) {
@@ -523,8 +534,15 @@ class MusicTokenIndexer {
                 Logger.info(`Retrying chain sync in 5 seconds (${retries + 1}/3)`);
                 setTimeout(() => this.startChainSync(retries + 1), 5000);
             } else {
-                Logger.error('Failed to start chain sync after 3 retries');
-                this.ws.close();
+                // If we've exhausted all retries, try with the earliest known era boundary
+                Logger.warn('Failed to start chain sync after 3 retries, falling back to Byron era');
+
+                const byronPoint = {
+                    slot: 0,
+                    id: "f0f7892b5c333cffc4b3c4344de48af4cc63f55e44936196f365a9ef2244134f" // Byron genesis hash
+                };
+
+                this.sendMessage("findIntersection", { points: [byronPoint] }, "find-intersection");
             }
         }
     }
@@ -536,25 +554,25 @@ class MusicTokenIndexer {
             Logger.debug('Received non-object block data, skipping');
             return;
         }
-  
+
         const blockData = block.block || block;
-        
+
         if (!blockData || !blockData.slot || !blockData.id) {
             Logger.debug('Skipping block without required slot/id properties');
             return;
         }
-    
+
         const currentSlot = Number(blockData.slot);
         if (isNaN(currentSlot)) {
             Logger.error('Invalid slot number received', blockData.slot);
             return;
         }
-    
+
         const foundMetadata: Array<{
             path: string[];
             metadata: any;
         }> = [];
-    
+
         const findMusicMetadata = (obj: any, path: string[] = []): void => {
             if (!obj || typeof obj !== 'object') return;
             if ('music_metadata_version' in obj) {
@@ -565,7 +583,7 @@ class MusicTokenIndexer {
                 findMusicMetadata(obj[key], [...path, key]);
             }
         };
-    
+
         if (blockData.transactions) {
             for (const tx of blockData.transactions) {
                 if (tx.metadata) {
@@ -573,7 +591,7 @@ class MusicTokenIndexer {
                 }
             }
         }
-    
+
         for (const { path, metadata } of foundMetadata) {
             try {
                 const index721 = path.indexOf('721');
@@ -591,7 +609,7 @@ class MusicTokenIndexer {
         if (currentSlot > this.loadedSlot) {
             this.latestProcessedSlot = currentSlot;
             this.latestProcessedHash = blockData.id;
-            
+
             if (currentSlot % 1000000 === 0) {
                 try {
                     await this.saveState(currentSlot, blockData.id);
@@ -600,7 +618,7 @@ class MusicTokenIndexer {
                 }
             }
         }
-    
+
         if (block.tip) {
             const tipSlot = Number(block.tip.slot);
             if (!isNaN(tipSlot)) {
@@ -707,12 +725,12 @@ class MusicTokenIndexer {
 
 async function gracefulShutdown(signal: string) {
     Logger.info(`Received ${signal}. Starting graceful shutdown...`);
-    
+
     const forceExitTimeout = setTimeout(() => {
         Logger.critical('Forcing exit after timeout');
         process.exit(1);
     }, 30000);
-    
+
     try {
         await indexer.stop();
         Logger.info('Graceful shutdown completed');
