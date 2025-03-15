@@ -393,3 +393,20 @@
 {"level":"INFO","timestamp":"2025-03-15T16:53:21.151Z","message":"Progress server closed"}
 {"level":"INFO","timestamp":"2025-03-15T16:53:21.151Z","message":"Indexer stopped successfully"}
 {"level":"INFO","timestamp":"2025-03-15T16:53:21.151Z","message":"Graceful shutdown completed"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.041Z","message":"Progress server listening on port 3001"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.042Z","message":"Testing database connection"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.074Z","message":"Database connection successful"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.074Z","message":"Loading last known state from database"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.079Z","message":"Loaded last state from database - Slot: 2433216, Hash: c53de61352b4074a628f5750f31153a6785e629c98b218fcc6372fe96c402f53"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.079Z","message":"Connecting to Ogmios at ws://localhost:1337"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.272Z","message":"Connected to Ogmios"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.277Z","message":"Network block height: 11606979"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.277Z","message":"Starting chain sync with 1 points, latest slot: 2433216"}
+{"level":"INFO","timestamp":"2025-03-15T17:10:23.330Z","message":"Intersection found"}
+{"level":"INFO","timestamp":"2025-03-15T17:18:40.483Z","message":"Received SIGINT. Starting graceful shutdown..."}
+{"level":"INFO","timestamp":"2025-03-15T17:18:40.484Z","message":"Stopping indexer"}
+{"level":"INFO","timestamp":"2025-03-15T17:18:40.552Z","message":"Saved state: Slot 2942555, Hash 8d7fd9abeed4911b9313eb14c66af7f618b6e5b8b0dcf8f7857dcd6163e58460"}
+{"level":"INFO","timestamp":"2025-03-15T17:18:40.553Z","message":"Database pool closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:18:40.554Z","message":"Progress server closed"}
+{"level":"INFO","timestamp":"2025-03-15T17:18:40.555Z","message":"Indexer stopped successfully"}
+{"level":"INFO","timestamp":"2025-03-15T17:18:40.555Z","message":"Graceful shutdown completed"}

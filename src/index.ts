@@ -25,19 +25,12 @@ interface LastProcessedState extends BlockState {
 }
 
 function renderSplashScreen() {
-    // ANSI color codes
     const cyan = '\x1b[36m';
     const yellow = '\x1b[33m';
     const blue = '\x1b[34m';
     const reset = '\x1b[0m';
-    
-    // Clear the console
     console.clear();
-    
-    // Create some spacing at the top
     console.log('\n');
-    
-    // Use template literal to preserve exact formatting
     const asciiArt = `
 ╔════════════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                            ║
@@ -63,7 +56,7 @@ ${yellow}♪${reset} ${blue}♫${reset} ${cyan}∿∿∿∿∿∿∿${reset} ${y
 
     // Print the ASCII art
     console.log(asciiArt);
-    
+
     // Add some spacing at the bottom
     console.log('\n');
 }
@@ -97,11 +90,11 @@ class MusicTokenIndexer {
                 this.latestProcessedHash = "af192981f47a4150b4d4f96e2184050699febbbc31de18c3815bb5f338578ff6";
                 console.log('No previous state found in database, using Allegra as starting point...');
             }
-    
+
             if (!this.latestProcessedSlot || !this.latestProcessedHash) {
                 throw new Error('Failed to initialize state');
             }
-    
+
             this.connectToOgmios();
         } catch (error: unknown) {
             throw error;
@@ -123,7 +116,7 @@ class MusicTokenIndexer {
         await this.pool.end();
     }
 
-    
+
 
     private async loadLastState(): Promise<LastProcessedState | null> {
         renderSplashScreen();
@@ -237,14 +230,14 @@ class MusicTokenIndexer {
         { slot: 72316796, hash: "c58a24ba8203e7629422a24d9dc68ce2ed495420bf40d9dab124373655161a20" },
         { slot: 133660799, hash: "e757d57eb8dc9500a61c60a39fadb63d9be6973ba96ae337fd24453d4d15c343" },
     ] as const;
-    
+
     private async startChainSync() {
         try {
             const points: Array<{ slot: number, id: string }> = [{
                 slot: Number(this.latestProcessedSlot),
                 id: this.latestProcessedHash
             }];
-    
+
             for (const eraBoundary of this.ERA_BOUNDARIES) {
                 if (eraBoundary.slot < this.latestProcessedSlot) {
                     points.push({
@@ -253,9 +246,9 @@ class MusicTokenIndexer {
                     });
                 }
             }
-    
+
             points.sort((a, b) => b.slot - a.slot);
-                
+
             this.sendMessage("findIntersection", { points }, "find-intersection");
         } catch (error) {
             console.error('Failed to start chain sync:', error);
