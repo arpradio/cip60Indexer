@@ -18,7 +18,6 @@ interface MusicMetadataInfo {
     metadata: any;
 }
 
-
 interface BlockState {
     slot: number;
     hash: string;
@@ -39,7 +38,7 @@ interface WebSocketWithState extends WebSocket {
     isAlive?: boolean;
 }
 
-const requiredEnvVars = ['DB_HOST', 'DB_PASSWORD', 'DB_NAME', 'OGMIOS_URL'];
+const requiredEnvVars: string[] = ['DB_HOST', 'DB_PASSWORD', 'DB_NAME', 'OGMIOS_URL'];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     console.error(`ERROR: Missing required environment variable: ${envVar}`);
@@ -73,8 +72,8 @@ const config = {
 };
 
 class Logger {
-    private static logFile = config.logging.file;
-    private static logLevel = {
+    private static logFile: string = config.logging.file;
+    private static logLevel: number = {
         debug: 1,
         info: 2,
         warn: 3,
@@ -103,7 +102,7 @@ class Logger {
     }
 
     private static log(level: string, message: string, meta?: any): void {
-        const timestamp = new Date().toISOString();
+        const timestamp: string = new Date().toISOString();
         const logEntry = {
             level,
             timestamp,
@@ -127,7 +126,7 @@ class Logger {
 
         if (this.logFile) {
             try {
-                const logDir = path.dirname(this.logFile);
+                const logDir: string = path.dirname(this.logFile);
                 if (!fs.existsSync(logDir)) {
                     fs.mkdirSync(logDir, { recursive: true });
                 }
@@ -177,8 +176,8 @@ class ProgressServer {
         Logger.info(`Progress server listening on port ${port}`);
     }
 
-    broadcastProgress(currentSlot: number, networkTip: number) {
-        const message = JSON.stringify({
+    broadcastProgress(currentSlot: number, networkTip: number): void {
+        const message: string = JSON.stringify({
             type: 'progress',
             data: { currentSlot, networkTip }
         });
@@ -190,7 +189,7 @@ class ProgressServer {
         });
     }
 
-    close() {
+    close(): void {
         if (this.pingInterval) {
             clearInterval(this.pingInterval);
             this.pingInterval = null;
@@ -250,10 +249,16 @@ class MusicTokenIndexer {
         this.progressServer = new ProgressServer(config.api.progressPort);
     }
 
-    async start() {
+    async start(): Promise<void> {
         try {
             await this.testDatabaseConnection();
-            const lastState = await this.loadLastState();
+            
+            const ogmiosHealthy: boolean = await this.checkOgmiosHealth();
+            if (!ogmiosHealthy) {
+                throw new Error('Ogmios is not available. Indexer cannot start.');
+            }
+            
+            const lastState: LastProcessedState | null = await this.loadLastState();
             if (lastState) {
                 this.loadedSlot = Number(lastState.slot);
                 this.latestProcessedSlot = this.loadedSlot;
@@ -277,7 +282,7 @@ class MusicTokenIndexer {
         }
     }
 
-    async stop() {
+    async stop(): Promise<void> {
         Logger.info('Stopping indexer');
         this.isProcessing = false;
 
@@ -310,7 +315,7 @@ class MusicTokenIndexer {
         Logger.info('Indexer stopped successfully');
     }
 
-    private async testDatabaseConnection() {
+    private async testDatabaseConnection(): Promise<void> {
         try {
             Logger.info('Testing database connection');
             await this.pool.query('SELECT NOW()');
@@ -319,6 +324,28 @@ class MusicTokenIndexer {
             Logger.critical('Cannot connect to database', error);
             throw new Error('Database connection failed: ' + (error instanceof Error ? error.message : String(error)));
         }
+    }
+
+    private async checkOgmiosHealth(): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            const ws: WebSocket = new WebSocket(this.ogmiosUrl);
+            const timeout: NodeJS.Timeout = setTimeout(() => {
+                ws.terminate();
+                resolve(false);
+            }, 5000);
+            
+            ws.on('open', () => {
+                clearTimeout(timeout);
+                ws.close();
+                resolve(true);
+            });
+            
+            ws.on('error', () => {
+                clearTimeout(timeout);
+                ws.terminate();
+                resolve(false);
+            });
+        });
     }
 
     private async loadLastState(): Promise<LastProcessedState | null> {
@@ -341,7 +368,7 @@ class MusicTokenIndexer {
         }
     }
 
-    private async saveState(slot: number, hash: string) {
+    private async saveState(slot: number, hash: string): Promise<void> {
         try {
             await this.pool.query(`
                 INSERT INTO audio.indexer_state (last_slot, last_block_hash)
@@ -354,18 +381,23 @@ class MusicTokenIndexer {
         }
     }
 
-    private cleanupWebsocket() {
-        if (this.ws) {
-            if (this.handlers) {
-                this.ws.removeListener('message', this.handlers.message);
-                this.ws.removeListener('open', this.handlers.open);
-                this.ws.removeListener('error', this.handlers.error);
-                this.ws.removeListener('close', this.handlers.close);
-            }
-            this.ws.terminate();
-            this.ws = null as any;
-            this.handlers = null;
+    private cleanupWebsocket(): void {
+        if (!this.ws) return;
+        
+        if (this.handlers) {
+            this.ws.removeListener('message', this.handlers.message);
+            this.ws.removeListener('open', this.handlers.open);
+            this.ws.removeListener('error', this.handlers.error);
+            this.ws.removeListener('close', this.handlers.close);
         }
+        
+        if (this.ws.readyState === WebSocket.OPEN || 
+            this.ws.readyState === WebSocket.CONNECTING) {
+            this.ws.terminate();
+        }
+        
+        this.ws = null as unknown as WebSocket;
+        this.handlers = null;
     }
 
     private async queryNetworkBlockHeight(): Promise<number> {
@@ -378,12 +410,12 @@ class MusicTokenIndexer {
                 id: "query-height"
             };
 
-            const timeoutId = setTimeout(() => {
+            const timeoutId: NodeJS.Timeout = setTimeout(() => {
                 this.ws.removeListener('message', messageHandler);
                 reject(new Error('Network height query timeout'));
             }, 10000);
 
-            const messageHandler = (data: WebSocket.Data) => {
+            const messageHandler = (data: WebSocket.Data): void => {
                 try {
                     const response = JSON.parse(data.toString());
                     if (response.id === "query-height") {
@@ -413,17 +445,24 @@ class MusicTokenIndexer {
         });
     }
 
-    private connectToOgmios() {
+    private connectToOgmios(): void {
         Logger.info(`Connecting to Ogmios at ${this.ogmiosUrl}`);
         
         this.cleanupWebsocket();
         this.ws = new WebSocket(this.ogmiosUrl);
         this.isProcessing = true;
 
+        const connectionTimeout: NodeJS.Timeout = setTimeout(() => {
+            if (this.ws && this.ws.readyState !== WebSocket.OPEN) {
+                Logger.error('Ogmios connection timed out');
+                this.ws.close();
+            }
+        }, 10000);
+
         const messageHandler = async (data: WebSocket.Data) => {
             try {
+                clearTimeout(connectionTimeout);
                 const response = JSON.parse(data.toString());
-                Logger.debug(`Received message type: ${response.id || 'no-id'}, has result: ${!!response.result}`);
                 
                 if (response.id === 'find-intersection') {
                     Logger.info('Intersection found');
@@ -434,20 +473,21 @@ class MusicTokenIndexer {
                     try {
                         await this.processBlock(response.result);
                     } catch (blockError) {
-                        Logger.error('Error processing block', blockError);
+                        Logger.error('Error processing block:', blockError);
                     }
                     this.requestNext();
                 } else {
-                    Logger.debug(`Unhandled message type: ${JSON.stringify(response).substring(0, 200)}...`);
+                    Logger.debug(`Unhandled message: ${JSON.stringify(response).substring(0, 200)}...`);
                     this.requestNext();
                 }
             } catch (error) {
-                Logger.error('Error processing message', error);
+                Logger.error('Error processing message:', error);
                 this.requestNext();
             }
         };
 
         const openHandler = async () => {
+            clearTimeout(connectionTimeout);
             Logger.info('Connected to Ogmios');
             this.retryCount = 0;
             try {
@@ -459,36 +499,37 @@ class MusicTokenIndexer {
                 this.ws.close();
             }
         };
-
         const errorHandler = (error: Error) => {
+            clearTimeout(connectionTimeout);
             Logger.error('WebSocket error', error);
             this.scheduleReconnect();
         };
 
         const closeHandler = () => {
+            clearTimeout(connectionTimeout);
             Logger.warn('WebSocket connection closed');
             this.scheduleReconnect();
         };
-
+    
         this.handlers = {
             message: messageHandler,
             open: openHandler,
             error: errorHandler,
             close: closeHandler
         };
-
+    
         this.ws.on('message', this.handlers.message);
         this.ws.on('open', this.handlers.open);
         this.ws.on('error', this.handlers.error);
         this.ws.on('close', this.handlers.close);
     }
-
-    private scheduleReconnect() {
+    
+    private scheduleReconnect(): void {
         if (this.reconnectTimer) {
             clearTimeout(this.reconnectTimer);
         }
-
-        const backoffTime =  60000;
+    
+        const backoffTime = Math.min(60000, 1000 * Math.pow(1.5, this.retryCount));
         this.retryCount++;
         
         Logger.info(`Scheduling reconnect in ${backoffTime}ms (attempt ${this.retryCount})`);
@@ -499,7 +540,7 @@ class MusicTokenIndexer {
         }, backoffTime);
     }
     
-    private async startChainSync(retries = 0) {
+    private async startChainSync(retries: number = 0): Promise<void> {
         try {
             const points: Array<{ slot: number, id: string }> = [{
                 slot: Number(this.latestProcessedSlot),
@@ -530,103 +571,131 @@ class MusicTokenIndexer {
         }
     }
 
-    private async processBlock(block: any) {
-        Logger.debug(`Processing block data: ${JSON.stringify(block).substring(0, 500)}...`);
-
-        if (!block || typeof block !== 'object') {
-            Logger.debug('Received non-object block data, skipping');
-            return;
-        }
-  
-        const blockData = block.block || block;
+    private async processBlock(block: any): Promise<void> {
+        Logger.debug(`Processing block data: ${JSON.stringify(block).substring(0, 200)}...`);
+      
+        // Navigate through result structure to find block data
+        let blockData: any = block;
         
-        if (!blockData || !blockData.slot || !blockData.id) {
-            Logger.debug('Skipping block without required slot/id properties');
-            return;
+        if (block.result?.block) {
+          blockData = block.result.block;
+        } else if (block.block) {
+          blockData = block.block;
         }
-    
-        const currentSlot = Number(blockData.slot);
+      
+        // Find slot and ID properties
+        const slot: string | number | undefined = 
+          blockData?.slot || 
+          blockData?.header?.slot;
+          
+        const id: string | undefined = 
+          blockData?.id || 
+          blockData?.header?.id || 
+          blockData?.hash;
+      
+        if (!slot || !id) {
+          Logger.debug(`Missing slot/id in block data`);
+          return;
+        }
+      
+        const currentSlot: number = Number(slot);
         if (isNaN(currentSlot)) {
-            Logger.error('Invalid slot number received', blockData.slot);
-            return;
+          Logger.error(`Invalid slot format: ${slot}`);
+          return;
         }
-    
+      
         const foundMetadata: Array<{
-            path: string[];
-            metadata: any;
+          path: string[];
+          metadata: any;
         }> = [];
-    
+        
+        // Function to recursively find music metadata in transaction metadata
         const findMusicMetadata = (obj: any, path: string[] = []): void => {
-            if (!obj || typeof obj !== 'object') return;
-            if ('music_metadata_version' in obj) {
-                foundMetadata.push({ path, metadata: obj });
-                return;
-            }
-            for (const key in obj) {
-                findMusicMetadata(obj[key], [...path, key]);
-            }
+          if (!obj || typeof obj !== 'object') return;
+          
+          // Check for CIP-60 identifier
+          if ('music_metadata_version' in obj) {
+            foundMetadata.push({ path, metadata: obj });
+            return;
+          }
+      
+          // Continue recursion for nested objects
+          for (const key in obj) {
+            findMusicMetadata(obj[key], [...path, key]);
+          }
         };
-    
-        if (blockData.transactions) {
-            for (const tx of blockData.transactions) {
-                if (tx.metadata) {
-                    findMusicMetadata(tx.metadata);
-                }
-            }
+      
+        // Process transactions to find music metadata
+        const transactions: any[] = blockData.transactions || [];
+        for (const tx of transactions) {
+          if (tx.metadata) {
+            findMusicMetadata(tx.metadata);
+          }
         }
-    
+      
+        // Process found metadata
         for (const { path, metadata } of foundMetadata) {
-            try {
-                const index721 = path.indexOf('721');
-                if (index721 >= 0 && index721 + 3 < path.length) {
-                    const policyId = path[index721 + 2];
-                    const assetName = path[index721 + 3];
-                    await this.handleMusicMetadata(policyId, assetName, metadata);
-                    Logger.info(`Found CIP-60 Music Token: ${policyId.slice(0, 8)}...${policyId.slice(-8)} - ${assetName} (v${metadata.music_metadata_version})`);
-                }
-            } catch (error: unknown) {
-                Logger.error('Error processing metadata', error);
+          try {
+            const index721: number = path.indexOf('721');
+            if (index721 >= 0 && index721 + 3 < path.length) {
+              const policyId: string = path[index721 + 2];
+              const assetName: string = path[index721 + 3];
+              await this.handleMusicMetadata(policyId, assetName, metadata);
+              Logger.info(`Found CIP-60 Music Token: ${policyId.slice(0, 8)}...${policyId.slice(-8)} - ${assetName} (v${metadata.music_metadata_version})`);
             }
+          } catch (error: unknown) {
+            Logger.error('Error processing metadata:', error);
+          }
         }
-
+      
+        // Update processing state
         if (currentSlot > this.loadedSlot) {
-            this.latestProcessedSlot = currentSlot;
-            this.latestProcessedHash = blockData.id;
-            
-            if (currentSlot % 1000000 === 0) {
-                try {
-                    await this.saveState(currentSlot, blockData.id);
-                } catch (error) {
-                    Logger.error('Error saving periodic state', error);
-                }
+          this.latestProcessedSlot = currentSlot;
+          this.latestProcessedHash = id.toString();
+          
+          // Save state periodically
+          if (currentSlot % 1000000 === 0) {
+            try {
+              await this.saveState(currentSlot, id.toString());
+            } catch (error) {
+              Logger.error('Error saving periodic state:', error);
             }
+          }
         }
-    
+      
+        // Update progress
         if (block.tip) {
-            const tipSlot = Number(block.tip.slot);
-            if (!isNaN(tipSlot)) {
-                const progress = (currentSlot / tipSlot) * 100;
-                Logger.debug(`Sync progress: ${progress.toFixed(2)}% (${currentSlot}/${tipSlot})`);
-                this.progressServer.broadcastProgress(currentSlot, tipSlot);
-            }
+          const tipSlot: number = Number(block.tip.slot);
+          if (!isNaN(tipSlot)) {
+            const progress: number = (currentSlot / tipSlot) * 100;
+            Logger.debug(`Sync progress: ${progress.toFixed(2)}% (${currentSlot}/${tipSlot})`);
+            this.progressServer.broadcastProgress(currentSlot, tipSlot);
+          }
         }
     }
 
-    private async handleMusicMetadata(policyId: string, assetName: string, metadata: any) {
+    private async handleMusicMetadata(
+        policyId: string, 
+        assetName: string, 
+        metadata: any
+    ): Promise<void> {
         try {
+            const metadataVersion: string = metadata.music_metadata_version.toString();
+            
             await this.storeAsset({
                 policyId,
                 assetName,
                 metadata: JSON.stringify(metadata),
-                metadataVersion: metadata.music_metadata_version
+                metadataVersion
             });
         } catch (error: unknown) {
             if (error instanceof Error && (error as PostgresError).code === '23505') {
+                // Handle duplicate key violation by updating instead
                 await this.updateAsset({
                     policyId,
                     assetName,
                     metadata: JSON.stringify(metadata),
-                    metadataVersion: metadata.music_metadata_version
+                    metadataVersion: metadata.music_metadata_version.toString()
                 });
             } else {
                 throw error;
@@ -634,11 +703,11 @@ class MusicTokenIndexer {
         }
     }
 
-    private requestNext() {
+    private requestNext(): void {
         this.sendMessage("nextBlock", {}, Date.now().toString());
     }
 
-    private sendMessage(method: string, params: any, id: string) {
+    private sendMessage(method: string, params: any, id: string): void {
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             const message = {
                 jsonrpc: "2.0",
@@ -666,19 +735,15 @@ class MusicTokenIndexer {
         assetName: string;
         metadata: string;
         metadataVersion: string;
-    }) {
-        try {
-            await this.pool.query(
-                `INSERT INTO cip60.assets 
-                (policy_id, asset_name, metadata_json, metadata_version)
-                VALUES ($1, $2, $3, $4)`,
-                [policyId, assetName, metadata, metadataVersion]
-            );
-        } catch (error) {
-            throw error;
-        }
+    }): Promise<void> {
+        await this.pool.query(
+            `INSERT INTO cip60.assets 
+            (policy_id, asset_name, metadata_json, metadata_version)
+            VALUES ($1, $2, $3, $4)`,
+            [policyId, assetName, metadata, metadataVersion]
+        );
     }
-
+    
     private async updateAsset({
         policyId,
         assetName,
@@ -689,27 +754,23 @@ class MusicTokenIndexer {
         assetName: string;
         metadata: string;
         metadataVersion: string;
-    }) {
-        try {
-            await this.pool.query(
-                `UPDATE cip60.assets 
-                 SET metadata_json = $3,
-                     metadata_version = $4,
-                     updated_at = NOW()
-                 WHERE policy_id = $1 
-                 AND asset_name = $2`,
-                [policyId, assetName, metadata, metadataVersion]
-            );
-        } catch (error) {
-            throw error;
-        }
+    }): Promise<void> {
+        await this.pool.query(
+            `UPDATE cip60.assets 
+             SET metadata_json = $3,
+                 metadata_version = $4,
+                 updated_at = NOW()
+             WHERE policy_id = $1 
+             AND asset_name = $2`,
+            [policyId, assetName, metadata, metadataVersion]
+        );
     }
 }
 
-async function gracefulShutdown(signal: string) {
+async function gracefulShutdown(signal: string): Promise<void> {
     Logger.info(`Received ${signal}. Starting graceful shutdown...`);
     
-    const forceExitTimeout = setTimeout(() => {
+    const forceExitTimeout: NodeJS.Timeout = setTimeout(() => {
         Logger.critical('Forcing exit after timeout');
         process.exit(1);
     }, 30000);
@@ -727,12 +788,12 @@ async function gracefulShutdown(signal: string) {
 }
 
 // Set up global error handlers
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', (error: Error) => {
     Logger.critical('CRITICAL: Uncaught exception:', error);
     gracefulShutdown('uncaughtException');
 });
 
-process.on('unhandledRejection', (reason) => {
+process.on('unhandledRejection', (reason: unknown) => {
     Logger.critical('CRITICAL: Unhandled promise rejection:', reason);
     gracefulShutdown('unhandledRejection');
 });
@@ -742,7 +803,7 @@ process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 // Initialize the indexer
-const indexer = new MusicTokenIndexer(
+const indexer: MusicTokenIndexer = new MusicTokenIndexer(
     config.ogmios.url,
     {
         host: config.database.host,
