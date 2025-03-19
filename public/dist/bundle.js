@@ -36136,39 +36136,52 @@ var Dashboard = function () {
     var _c = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]), recentAssets = _c[0], setRecentAssets = _c[1];
     var _d = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false), isLoadingAssets = _d[0], setIsLoadingAssets = _d[1];
     (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+        var isActive = true;
         var fetchStats = function () { return __awaiter(void 0, void 0, void 0, function () {
             var response, data_1, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, fetch('/api/stats')];
+                        if (!isActive)
+                            return [2 /*return*/];
+                        _a.label = 1;
                     case 1:
-                        response = _a.sent();
-                        return [4 /*yield*/, response.json()];
+                        _a.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, fetch('/api/stats')];
                     case 2:
-                        data_1 = _a.sent();
-                        setStats(function (prevStats) {
-                            if (data_1.currentSlot !== prevStats.currentSlot ||
-                                data_1.networkTip !== prevStats.networkTip ||
-                                data_1.blockHeight !== prevStats.blockHeight ||
-                                data_1.epoch !== prevStats.epoch) {
-                                return data_1;
-                            }
-                            return prevStats;
-                        });
-                        return [3 /*break*/, 4];
+                        response = _a.sent();
+                        if (!response.ok) {
+                            throw new Error("Error fetching stats: ".concat(response.status));
+                        }
+                        return [4 /*yield*/, response.json()];
                     case 3:
+                        data_1 = _a.sent();
+                        if (isActive) {
+                            setStats(function (prevStats) {
+                                if (data_1.currentSlot !== prevStats.currentSlot ||
+                                    data_1.networkTip !== prevStats.networkTip ||
+                                    data_1.blockHeight !== prevStats.blockHeight ||
+                                    data_1.epoch !== prevStats.epoch) {
+                                    return data_1;
+                                }
+                                return prevStats;
+                            });
+                        }
+                        return [3 /*break*/, 5];
+                    case 4:
                         error_1 = _a.sent();
                         console.error('Error fetching stats:', error_1);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
         }); };
         fetchStats();
-        var interval = setInterval(fetchStats, 100);
-        return function () { return clearInterval(interval); };
+        var interval = setInterval(fetchStats, 3000);
+        return function () {
+            isActive = false;
+            clearInterval(interval);
+        };
     }, []);
     var fetchRecentAssets = (0,react__WEBPACK_IMPORTED_MODULE_1__.useCallback)(function () { return __awaiter(void 0, void 0, void 0, function () {
         var response, data, error_2;

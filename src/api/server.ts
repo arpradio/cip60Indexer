@@ -249,17 +249,13 @@ router.get('/stats', async (req, res) => {
     }
 });
 
-// In API server
-// Add health check endpoint
+
 router.get('/health', async (req, res) => {
     try {
-      // Check database connection
       await pool.query('SELECT 1');
       
-      // Check Ogmios connection
       const ogmiosStatus = ogmiosConnection.isConnected() ? 'connected' : 'disconnected';
       
-      // Return health status
       res.json({
         status: 'healthy',
         uptime: process.uptime(),

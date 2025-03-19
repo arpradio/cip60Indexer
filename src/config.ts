@@ -1,11 +1,7 @@
-// src/config.ts
 import dotenv from 'dotenv';
-import fs from 'fs';
 
-// Load environment variables
 dotenv.config();
 
-// Validate required environment variables
 const requiredEnvVars = ['DB_HOST', 'DB_PASSWORD', 'DB_NAME', 'OGMIOS_URL'];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {

@@ -18,6 +18,7 @@ interface MusicMetadataInfo {
     metadata: any;
 }
 
+
 interface BlockState {
     slot: number;
     hash: string;
@@ -325,7 +326,7 @@ class MusicTokenIndexer {
         try {
             const result = await this.pool.query(`
                 SELECT last_slot::bigint as slot, last_block_hash as hash, updated_at
-                FROM cip60.indexer_state 
+                FROM audio.indexer_state 
                 ORDER BY updated_at DESC 
                 LIMIT 1
             `);
@@ -343,7 +344,7 @@ class MusicTokenIndexer {
     private async saveState(slot: number, hash: string) {
         try {
             await this.pool.query(`
-                INSERT INTO cip60.indexer_state (last_slot, last_block_hash)
+                INSERT INTO audio.indexer_state (last_slot, last_block_hash)
                 VALUES ($1::bigint, $2)
             `, [slot, hash]);
             Logger.info(`Saved state: Slot ${slot}, Hash ${hash}`);
@@ -487,7 +488,7 @@ class MusicTokenIndexer {
             clearTimeout(this.reconnectTimer);
         }
 
-        const backoffTime = Math.min(1000 * Math.pow(2, this.retryCount), 60000); // Max 1 minute
+        const backoffTime =  60000;
         this.retryCount++;
         
         Logger.info(`Scheduling reconnect in ${backoffTime}ms (attempt ${this.retryCount})`);
