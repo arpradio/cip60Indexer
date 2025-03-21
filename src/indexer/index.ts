@@ -413,7 +413,7 @@ class MusicTokenIndexer {
             const timeoutId: NodeJS.Timeout = setTimeout(() => {
                 this.ws.removeListener('message', messageHandler);
                 reject(new Error('Network height query timeout'));
-            }, 10000);
+            }, 3000);
 
             const messageHandler = (data: WebSocket.Data): void => {
                 try {
@@ -574,7 +574,6 @@ class MusicTokenIndexer {
     private async processBlock(block: any): Promise<void> {
         Logger.debug(`Processing block data: ${JSON.stringify(block).substring(0, 200)}...`);
       
-        // Navigate through result structure to find block data
         let blockData: any = block;
         
         if (block.result?.block) {
@@ -582,8 +581,7 @@ class MusicTokenIndexer {
         } else if (block.block) {
           blockData = block.block;
         }
-      
-        // Find slot and ID properties
+
         const slot: string | number | undefined = 
           blockData?.slot || 
           blockData?.header?.slot;
@@ -609,23 +607,19 @@ class MusicTokenIndexer {
           metadata: any;
         }> = [];
         
-        // Function to recursively find music metadata in transaction metadata
         const findMusicMetadata = (obj: any, path: string[] = []): void => {
           if (!obj || typeof obj !== 'object') return;
           
-          // Check for CIP-60 identifier
           if ('music_metadata_version' in obj) {
             foundMetadata.push({ path, metadata: obj });
             return;
           }
-      
-          // Continue recursion for nested objects
+
           for (const key in obj) {
             findMusicMetadata(obj[key], [...path, key]);
           }
         };
-      
-        // Process transactions to find music metadata
+
         const transactions: any[] = blockData.transactions || [];
         for (const tx of transactions) {
           if (tx.metadata) {
@@ -633,7 +627,6 @@ class MusicTokenIndexer {
           }
         }
       
-        // Process found metadata
         for (const { path, metadata } of foundMetadata) {
           try {
             const index721: number = path.indexOf('721');
@@ -648,12 +641,10 @@ class MusicTokenIndexer {
           }
         }
       
-        // Update processing state
         if (currentSlot > this.loadedSlot) {
           this.latestProcessedSlot = currentSlot;
           this.latestProcessedHash = id.toString();
           
-          // Save state periodically
           if (currentSlot % 1000000 === 0) {
             try {
               await this.saveState(currentSlot, id.toString());
@@ -662,8 +653,7 @@ class MusicTokenIndexer {
             }
           }
         }
-      
-        // Update progress
+    
         if (block.tip) {
           const tipSlot: number = Number(block.tip.slot);
           if (!isNaN(tipSlot)) {
@@ -690,7 +680,7 @@ class MusicTokenIndexer {
             });
         } catch (error: unknown) {
             if (error instanceof Error && (error as PostgresError).code === '23505') {
-                // Handle duplicate key violation by updating instead
+                
                 await this.updateAsset({
                     policyId,
                     assetName,
@@ -787,7 +777,6 @@ async function gracefulShutdown(signal: string): Promise<void> {
     }
 }
 
-// Set up global error handlers
 process.on('uncaughtException', (error: Error) => {
     Logger.critical('CRITICAL: Uncaught exception:', error);
     gracefulShutdown('uncaughtException');
@@ -798,11 +787,11 @@ process.on('unhandledRejection', (reason: unknown) => {
     gracefulShutdown('unhandledRejection');
 });
 
-// Register shutdown handlers
+
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
-// Initialize the indexer
+
 const indexer: MusicTokenIndexer = new MusicTokenIndexer(
     config.ogmios.url,
     {
@@ -814,7 +803,6 @@ const indexer: MusicTokenIndexer = new MusicTokenIndexer(
     }
 );
 
-// Start the indexer
 indexer.start().catch(error => {
     Logger.critical('Failed to start indexer:', error);
     process.exit(1);
