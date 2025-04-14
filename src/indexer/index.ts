@@ -574,7 +574,7 @@ class MusicTokenIndexer {
     private async processBlock(block: any): Promise<void> {
         Logger.debug(`Processing block data: ${JSON.stringify(block).substring(0, 200)}...`);
       
-        // Navigate through result structure to find block data
+       
         let blockData: any = block;
         
         if (block.result?.block) {
@@ -583,7 +583,7 @@ class MusicTokenIndexer {
           blockData = block.block;
         }
       
-        // Find slot and ID properties
+        
         const slot: string | number | undefined = 
           blockData?.slot || 
           blockData?.header?.slot;
@@ -609,23 +609,26 @@ class MusicTokenIndexer {
           metadata: any;
         }> = [];
         
-        // Function to recursively find music metadata in transaction metadata
         const findMusicMetadata = (obj: any, path: string[] = []): void => {
-          if (!obj || typeof obj !== 'object') return;
+            if (!obj || typeof obj !== 'object') return;
+            
+            // Check for music metadata version in various common formats
+            if (
+              'music_metadata_version' in obj || 
+              'Music_Metadata_Version' in obj || 
+              'Music Metadata Version' in obj ||
+              'MUSIC_METADATA_VERSION' in obj
+            ) {
+              foundMetadata.push({ path, metadata: obj });
+              return;
+            }
           
-          // Check for CIP-60 identifier
-          if ('music_metadata_version' in obj) {
-            foundMetadata.push({ path, metadata: obj });
-            return;
-          }
-      
-          // Continue recursion for nested objects
-          for (const key in obj) {
-            findMusicMetadata(obj[key], [...path, key]);
-          }
-        };
-      
-        // Process transactions to find music metadata
+            // Continue recursion for nested objects
+            for (const key in obj) {
+              findMusicMetadata(obj[key], [...path, key]);
+            }
+          };
+
         const transactions: any[] = blockData.transactions || [];
         for (const tx of transactions) {
           if (tx.metadata) {
@@ -633,7 +636,6 @@ class MusicTokenIndexer {
           }
         }
       
-        // Process found metadata
         for (const { path, metadata } of foundMetadata) {
           try {
             const index721: number = path.indexOf('721');
@@ -648,7 +650,6 @@ class MusicTokenIndexer {
           }
         }
       
-        // Update processing state
         if (currentSlot > this.loadedSlot) {
           this.latestProcessedSlot = currentSlot;
           this.latestProcessedHash = id.toString();
@@ -680,7 +681,7 @@ class MusicTokenIndexer {
         metadata: any
     ): Promise<void> {
         try {
-            const metadataVersion: string = metadata.music_metadata_version.toString();
+            const metadataVersion: string = metadata.music_metadata_version || null;
             
             await this.storeAsset({
                 policyId,
@@ -695,7 +696,7 @@ class MusicTokenIndexer {
                     policyId,
                     assetName,
                     metadata: JSON.stringify(metadata),
-                    metadataVersion: metadata.music_metadata_version.toString()
+                    metadataVersion: metadata.music_metadata_version
                 });
             } else {
                 throw error;
@@ -734,7 +735,7 @@ class MusicTokenIndexer {
         policyId: string;
         assetName: string;
         metadata: string;
-        metadataVersion: string;
+        metadataVersion: string | number ;
     }): Promise<void> {
         await this.pool.query(
             `INSERT INTO cip60.assets 

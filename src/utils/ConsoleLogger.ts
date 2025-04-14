@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-export class ConsoleLogger {
+export class Logger {
     private static lastLine = '';
 
     static updateProgress(currentSlot: number, tipSlot: number, blockHeight: number): void {
