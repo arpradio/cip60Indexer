@@ -81,6 +81,9 @@ class Logger {
         critical: 5
     }[config.logging.level] || 2;
 
+    private static maxFileSize: number = 10 * 1024 * 1024; // 10MB
+    private static maxBackups: number = 3;
+
     static debug(message: string, meta?: any): void {
         if (this.logLevel <= 1) this.log('DEBUG', message, meta);
     }
@@ -125,15 +128,49 @@ class Logger {
         }
 
         if (this.logFile) {
-            try {
-                const logDir: string = path.dirname(this.logFile);
-                if (!fs.existsSync(logDir)) {
-                    fs.mkdirSync(logDir, { recursive: true });
-                }
-                fs.appendFileSync(this.logFile, JSON.stringify(logEntry) + '\n');
-            } catch (err) {
-                console.error('Failed to write to log file:', err);
+            this.writeToLogFile(JSON.stringify(logEntry) + '\n');
+        }
+    }
+
+    private static writeToLogFile(content: string): void {
+        try {
+            const logDir: string = path.dirname(this.logFile);
+            if (!fs.existsSync(logDir)) {
+                fs.mkdirSync(logDir, { recursive: true });
             }
+
+            if (fs.existsSync(this.logFile)) {
+                const stats = fs.statSync(this.logFile);
+                if (stats.size >= this.maxFileSize) {
+                    this.rotateLogFile();
+                }
+            }
+
+            fs.appendFileSync(this.logFile, content);
+        } catch (err) {
+            console.error('Failed to write to log file:', err);
+        }
+    }
+
+    private static rotateLogFile(): void {
+        try {
+            // Move existing backups
+            for (let i = this.maxBackups - 1; i >= 1; i--) {
+                const oldFile = `${this.logFile}.${i}`;
+                const newFile = `${this.logFile}.${i + 1}`;
+                if (fs.existsSync(oldFile)) {
+                    fs.renameSync(oldFile, newFile);
+                }
+            }
+
+            // Archive current log file
+            if (fs.existsSync(this.logFile)) {
+                fs.renameSync(this.logFile, `${this.logFile}.1`);
+            }
+
+            console.log(`Log file rotated. Old logs archived.`);
+        } catch (err) {
+            console.error('Failed to rotate log file:', err);
         }
     }
 }
