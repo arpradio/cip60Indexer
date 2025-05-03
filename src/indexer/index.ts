@@ -692,7 +692,7 @@ class MusicTokenIndexer {
           this.latestProcessedHash = id.toString();
           
           // Save state periodically
-          if (currentSlot % 1000000 === 0) {
+          if (currentSlot % 100000 === 0) {
             try {
               await this.saveState(currentSlot, id.toString());
             } catch (error) {
