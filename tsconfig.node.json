@@ -13,5 +13,4 @@
     "resolveJsonModule": true
   },
   "include": ["src/indexer/**/*", "src/api/**/*"],
-  "exclude": ["node_modules", "src/components/**/*", "src/index.tsx"]
 }
