@@ -1,4 +1,3 @@
-// src/utils/ErrorHandler.ts
 export enum ErrorSeverity {
     INFO = 'INFO',
     WARNING = 'WARNING',

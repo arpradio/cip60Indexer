@@ -10,24 +10,21 @@
 
 ## Overview
 
-The CIP-60 Music Token Indexer is a specialized blockchain indexing tool designed to track and catalog music-related NFTs on the Cardano blockchain that comply with the [CIP-60 NFT Metadata Standard]([https://github.com/cardano-foundation/CIPs/pull/258](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0060)). This tool provides real-time monitoring and indexing of music tokens, enabling efficient querying and analysis of on-chain music assets.
+The CIP-60 Music Token Indexer is a specialized blockchain indexing tool designed to track and catalog music-related NFTs on the Cardano blockchain that comply with the [CIP-60 NFT Metadata Standard](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0060). This tool provides real-time monitoring and indexing of music tokens, enabling efficient querying and analysis of on-chain music assets.
 
 ### Key Features
 
 - Real-time indexing of CIP-60 compliant music tokens
-- Support for all three versions of the music metadata standard
+- Support for all three versions of the music metadata standard  
 - Automatic state management and recovery
-- Live dashboard for monitoring indexing progress
-- RESTful API for querying indexed assets
 - PostgreSQL persistence layer
+- Simple REST API for querying indexed assets
 
 ## Architecture
 
-The indexer consists of three main components:
+The indexer consists of a single main component:
 
-1. **Core Indexer**: Connects to Cardano network via Ogmios RPC calls (_we recommend using the [cardano-node-ogmios](https://hub.docker.com/r/cardanosolutions/cardano-node-ogmios) build!_), processes blocks, and extracts music token metadata
-2. **API Server**: Provides basic REST endpoints for querying indexed data
-3. **Dashboard**: Web interface for monitoring indexing progress and system status
+1. **Indexer Process**: Connects to Cardano network via Ogmios RPC calls, processes blocks, and extracts music token metadata
 
 ## Prerequisites
 
@@ -75,7 +72,12 @@ The indexer consists of three main components:
 
 ## API Documentation
 
+The indexer includes a simple REST API for querying indexed data.
+
 ### Endpoints
+
+#### GET /api/health
+Returns current indexer health status.
 
 #### GET /api/stats
 Returns current indexing statistics and network state.
@@ -97,6 +99,19 @@ npm test
 ```bash
 npm run build
 ```
+
+## Docker
+
+You can run the complete stack using Docker:
+
+```bash
+docker-compose up -d
+```
+
+This will start:
+- PostgreSQL database
+- Cardano-ogmios node
+- The indexer itself
 
 ## Troubleshooting
 
